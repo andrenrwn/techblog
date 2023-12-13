@@ -1,0 +1,24 @@
+{
+  "name": "techblog",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "seed": "node seeds/seed.js"
+  },
+  "keywords": [],
+  "author": "andrenrwn",
+  "license": "MIT",
+  "dependencies": {
+    "bcrypt": "latest",
+    "connect-session-sequelize": "latest",
+    "dotenv": "latest",
+    "express": "latest",
+    "express-handlebars": "latest",
+    "express-session": "latest",
+    "mysql2": "latest",
+    "sequelize": "latest"
+  }
+}

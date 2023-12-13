@@ -1,0 +1,38 @@
+[
+    {
+        "article_id": 1,
+        "keyword_id": 1
+    },
+    {
+        "article_id": 1,
+        "keyword_id": 2
+    },
+    {
+        "article_id": 2,
+        "keyword_id": 3
+    },
+    {
+        "article_id": 2,
+        "keyword_id": 4
+    },
+    {
+        "article_id": 3,
+        "keyword_id": 3
+    },
+    {
+        "article_id": 3,
+        "keyword_id": 1
+    },
+    {
+        "article_id": 1,
+        "keyword_id": 5
+    },
+    {
+        "article_id": 5,
+        "keyword_id": 8
+    },
+    {
+        "article_id": 5,
+        "keyword_id": 7
+    }
+]

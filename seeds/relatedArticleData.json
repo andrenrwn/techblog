@@ -1,0 +1,12 @@
+[
+    {
+        "article_id": 1,
+        "related_article": 2,
+        "relation": "original article"
+    },
+    {
+        "article_id": 2,
+        "related_article": 1,
+        "relation": "update of"
+    }
+]

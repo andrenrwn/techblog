@@ -1,0 +1,38 @@
+[
+    {
+        "id": 1,
+        "keyword": "entertainment"
+    },
+    {
+        "id": 2,
+        "keyword": "programming"
+    },
+    {
+        "id": 3,
+        "keyword": "art"
+    },
+    {
+        "id": 4,
+        "keyword": "iot"
+    },
+    {
+        "id": 5,
+        "keyword": "art"
+    },
+    {
+        "id": 6,
+        "keyword": "movie"
+    },
+    {
+        "id": 7,
+        "keyword": "anime"
+    },
+    {
+        "id": 8,
+        "keyword": "smart home"
+    },
+    {
+        "id": 9,
+        "keyword": "javascript"
+    }
+]

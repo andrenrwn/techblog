@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "parent": null,
+    "user_id": 1,
+    "version": 1,
+    "title": "First to Post an Article",
+    "content": "This is the first post in this blog site!",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "parent": null,
+    "user_id": 1,
+    "version": 1,
+    "title": "First to Post an Article v2",
+    "content": "This is the first modified post in this blog site!",
+    "status": "active"
+  },
+  {
+    "id": 3,
+    "parent": null,
+    "user_id": 3,
+    "version": 1,
+    "title": "Second article",
+    "content": "This is the second article",
+    "status": "active"
+  },
+  {
+    "id": 4,
+    "parent": null,
+    "user_id": 4,
+    "version": 1,
+    "title": "Third Article",
+    "content": "This is the third post in this blog site!",
+    "status": "active"
+  },
+  {
+    "id": 2,
+    "parent": null,
+    "user_id": 5,
+    "version": 1,
+    "title": "Fifth element",
+    "content": "Greetings from Dallas and Leeloo! This site is out of this world!",
+    "status": "active"
+  }
+]

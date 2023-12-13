@@ -1,0 +1,37 @@
+[
+  {
+    "name": "user2",
+    "alias": "bloggerduo",
+    "email": "user2@hotmail.com",
+    "password": "user2",
+    "isadmin": false
+  },
+  {
+    "name": "user1",
+    "alias": "cat user",
+    "email": "user1@hotmail.com",
+    "password": "user1",
+    "isadmin": true
+  },
+  {
+    "name": "Bob",
+    "alias": "bud",
+    "email": "bob@hotmail.com",
+    "password": "pass123",
+    "isadmin": false
+  },
+  {
+    "name": "Uncle",
+    "alias": "From another world",
+    "email": "uncle@gmail.com",
+    "password": "pass123",
+    "isadmin": false
+  },
+  {
+    "name": "Alice",
+    "alias": "AnnieTheTitan",
+    "email": "alice@aol.com",
+    "password": "pass123",
+    "isadmin": false
+  }
+]
