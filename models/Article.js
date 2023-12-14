@@ -40,7 +40,7 @@ Article.init(
       allowNull: true,
     },
     content: {
-      type: DataTypes.STRING(65536),
+      type: DataTypes.TEXT('long'),
       allowNull: true,
     },
     status: {

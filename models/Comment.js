@@ -2,6 +2,7 @@ const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
 const Article = require('./Article');
+const User = require('./User');
 
 class Comment extends Model { }
 
@@ -18,7 +19,7 @@ Comment.init(
       allowNull: false,
       references: {
         model: User,
-        key: 'user_id',
+        key: 'id',
         unique: false,
       },
     },
@@ -41,7 +42,7 @@ Comment.init(
       },
     },
     content: {
-      type: DataTypes.STRING(16384),
+      type: DataTypes.TEXT('medium'),
       allowNull: false,
     },
   },

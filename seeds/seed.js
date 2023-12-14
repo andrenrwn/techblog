@@ -3,7 +3,7 @@ const sequelize = require('../config/connection');
 // Import sequelize models
 const {
   Article,
-  ArtickeKeyword,
+  ArticleKeyword,
   Comment,
   Keyword,
   RelatedArticle,
@@ -13,7 +13,7 @@ const {
 // Seed data
 const userData = require('./userData.json');
 const articleData = require('./articleData.json');
-const artickeKeywordData = require('./artickeKeywordData.json');
+const articleKeywordData = require('./articleKeywordData.json');
 const commentData = require('./commentData.json');
 const keywordData = require('./keywordData.json');
 const relatedArticleData = require('./relatedArticleData.json');
@@ -29,36 +29,37 @@ const seedDatabase = async () => {
     await User.create({
       ...user,
     });
-  }
+  };
 
-  for (const board of boardsData) {
-    await Boards.create({
-      ...board,
+  for (const article of articleData) {
+    await Article.create({
+      ...article,
     });
-  }
+  };
 
-  for (const filter of filtersData) {
-    await Filters.create({
-      ...filter,
+  for (const relation of relatedArticleData) {
+    await RelatedArticle.create({
+      ...relation,
     });
-  }
+  };
 
-  for (const location of locationData) {
-    await Locations.create({
-      ...location,
+  for (const keyword of keywordData) {
+    await Keyword.create({
+      ...keyword,
     });
-  }
+  };
 
-  // add seed data for the relationship between boards and users
-  console.log('seedata\n', users_boardsData);
-
-  // The following sequelize calls for a many-to-many table gives a parameter error when trying to populate JSON data, so we bypass using parameterized queries
-  // -----
-  for (const usersboards of users_boardsData) {
-    await Userstoboards.create({
-      ...usersboards,
+  for (const akdata of articleKeywordData) {
+    await ArticleKeyword.create({
+      ...akdata,
     });
-  }
+  };
+
+  for (const comment of commentData) {
+    await Comment.create({
+      ...comment,
+    });
+  };
 
   // add seed data for the relationship between boards and users, not using parameterized queries (may be subject to SQL injection attacks)
   // const { QueryTypes } = require('sequelize');

@@ -8,6 +8,12 @@ const RelatedArticle = require('./RelatedArticle');
 // An article can be related many other articles.
 // Example: An article can be a three-part series, a follow-up, or update to someone else's article
 Article.belongsToMany(Article, {
+  as: 'article1',
+  through: { model: RelatedArticle }
+});
+
+Article.belongsToMany(Article, {
+  as: 'article2',
   through: { model: RelatedArticle }
 });
 
