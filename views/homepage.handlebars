@@ -1,0 +1,26 @@
+<!-- Loop over all users -->
+{{!-- {{#each users as |user| }}
+<div class="row align-center mb-5">
+  <div class="col-md-6">
+    <h2>{{{get_emoji}}} {{user.name}}</h2>
+  </div>
+  <div class="col-md-6">
+    <h3><a href="mailto:{{user.email}}">{{user.email}}</a></h3>
+  </div>
+</div>
+{{/each}} --}}
+
+<!-- Loop over all user locations -->
+<div class="gap-2 flex flex-wrap">
+  {{#each articleDataFormatted as |articleItem|}}
+  <div class="card lg:card-side bg-grey-800 shadow-xl">
+    <div class="card-body">
+      <h2 class="card-title">{{articleItem.title}}</h2>
+      <div class="gap-2 rounded-2xl text-black bg-transparent w-fit flex flex-wrap flex-col">
+        <button class='btn btn-outline btn-primary'>{{articleItem.user.alias}}</button>
+        <p>{{articleItem.content}}</p>
+      </div>
+    </div>
+  </div>
+  {{/each}}
+</div>

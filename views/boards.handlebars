@@ -1,0 +1,115 @@
+<div class='row p-2'>
+  <div class='flex flex-row p-2'>
+
+    <div class='avatar online placeholder'>
+      <div class='bg-neutral text-neutral-content rounded-full w-12'>
+        <span class='text-3xl font-bold'>{{first_char currentuser.name}}</span>
+      </div>
+    </div>
+
+    <h2 class='text-4xl font-bold mx-2 text-primary'>Welcome, {{currentuser.name}}!</h2>
+  </div>
+</div>
+{{#if sharedusers.length}}
+<div class="bg-base-200 ml-[5%] rounded-box gap-1">
+  <h3 class="text-primary font-bold">Shared users:</h3>
+  {{#each sharedusers as |shareduser|}}
+  <li class="flex flex-row gap-1">
+    <a class="btn">
+      <div class='avatar online placeholder mr-2'>
+        <div class='bg-neutral text-neutral-content rounded-full w-8'>
+          <span class='text-xl font-bold'>{{first_char shareduser.name}}</span>
+        </div>
+      </div>{{shareduser.name}}
+    </a>
+  </li>
+  {{/each}}
+</div>
+{{/if}}
+
+<div class='flex flex-wrap text-primary'>
+  <h3>Add a user to this board</h3>
+  <!-- if users want to share their board with others -->
+  <section class="form-control w-1/2 lg:w-1/2">
+    <label class="label">
+      <span class="label-text w-full max-w-xs text-2xl">Enter a username:</span>
+    </label>
+
+    <input id="sharetouser" type="text" placeholder="Enter the user name" name="desttypes" list="desttypes"
+      class="input input-bordered w-full input-primary" />
+    <button id="addusertoboard" class="btn btn-primary" alt="Add a user to this board"
+      onclick="addusertoboard(event)">Add User</button>
+  </section>
+</div>
+
+{{> boardlistpartial}}
+
+{{> locationpartial}}
+
+<div>
+  <h3 class='text-4xl font-bold p-2'>{{#if selectedboard}}Search{{/if}}</h3>
+
+  {{#if filters.length}}
+  <div class='flex flex-wrap m-2'>
+    <h3 class='text-2xl m-2'>Filters:</h3>
+    <ul class='menu menu-horizontal lg:menu-horizontal bg-gray-300 rounded-box gap-5'>
+      {{#each filters}}
+      {{!-- <li><a>{{filter_name}}</a></li> --}}
+      <button class="btn btn-info rounded-xl btn-outline">{{filter_name}}</button>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}
+
+  {{#if selectedboard}}
+  <div class='flex flex-wrap text-primary'>
+    <!-- search section for cities -->
+    <section class="form-control w-full lg:w-1/2 lg:pr-2">
+      <label class="label">
+        <span class="label-text w-full max-w-xs text-2xl">Destination:</span>
+      </label>
+
+      <input id="wheretosearch" type="text" placeholder="Search keywords" name="desttypes" list="desttypes"
+        class="input input-bordered w-full input-primary" />
+    </section>
+
+    <section class="form-control w-full lg:w-1/2">
+      <label class="label">
+        <span class="label-text w-full max-w-xs text-2xl">Filters:</span>
+      </label>
+
+      <input id="whattosearch" type="text" placeholder="Search keywords" name="filtertypes" list="filtertypes"
+        class="input input-bordered w-full input-primary" />
+      <datalist id="filtertypes">
+        {{#if filters.length}}
+        {{#each filters}}
+        <option value="{{filter_name}}">
+          {{/each}}
+          {{/if}}
+      </datalist>
+    </section>
+
+  </div>
+
+  <div class="my-1 gap-1">
+    {{!-- <button id="find-me" class="btn btn-primary" onclick="geoFindMe()">Search My Location</button> --}}
+    <button id="find-map" class="btn btn-primary w-full" alt="Search for filters near the specified location"
+      onclick="searchHandler(event)">Inspire Me</button>
+  </div>
+  <div id="geometry" class="btn p-2 m-2">
+    <div id="boardlat" data-lat="{{selectedboard.lat}}">Latitude: {{selectedboard.lat}}</div>
+    <div id="boardlng" data-lng="{{selectedboard.lng}}">Longitude: {{selectedboard.lng}}</div>
+  </div>
+
+  <div id="map" class="w-full h-64 rounded-2xl w-full h-96 shadow-2xl "></div>
+  {{/if}}
+
+</div>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDAKGh9hM6lkhtz5MNmuUehgwnvtLVjYr8&libraries=places,maps&v=beta&callback=initMap"
+  async>
+  </script>
+{{!--
+<script src="/js/googleapis.com_beta.js"></script> --}}
+<script src='/js/boards.js' defer></script>

@@ -9,11 +9,13 @@ const RelatedArticle = require('./RelatedArticle');
 // Example: An article can be a three-part series, a follow-up, or update to someone else's article
 Article.belongsToMany(Article, {
   as: 'article1',
+  foreignKey: 'user_id',
   through: { model: RelatedArticle }
 });
 
 Article.belongsToMany(Article, {
   as: 'article2',
+  foreignKey: 'user_id',
   through: { model: RelatedArticle }
 });
 
@@ -26,22 +28,24 @@ Keyword.belongsToMany(Article, {
   through: { model: ArticleKeyword }
 });
 
-// An article can have many comments
-Article.hasMany(Comment, {
-  foreignKey: 'id',
-  onDelete: 'CASCADE', // If an article is deleted, all its comments are as well
-});
-
 // A User can write many articles
 User.hasMany(Article, {
-  foreignKey: 'id',
+  foreignKey: 'user_id',
   // onDelete: 'CASCADE', // we don't want to delete the article if a user is deleted
+});
+
+Article.belongsTo(User, {
+  foreignKey: 'user_id',
 });
 
 // A User can write many comments
 User.hasMany(Comment, {
-  foreignKey: 'id',
+  foreignKey: 'user_id',
   // onDelete: 'CASCADE', // we don't want to delete the comment if a user is deleted
+});
+
+Comment.belongsTo(User, {
+  foreignKey: 'user_id',
 });
 
 module.exports = { User, Article, Comment, Keyword, ArticleKeyword, RelatedArticle };
