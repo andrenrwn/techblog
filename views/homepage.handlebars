@@ -13,11 +13,11 @@
 <!-- Loop over all user locations -->
 <div class="gap-2 flex flex-wrap">
   {{#each articleDataFormatted as |articleItem|}}
-  <div class="card lg:card-side bg-grey-800 shadow-xl">
+  <div class="card min-w-[49%] max-w-[49%] border-none bg-grey-800 shadow-2xl">
     <div class="card-body">
       <h2 class="card-title">{{articleItem.title}}</h2>
       <div class="gap-2 rounded-2xl text-black bg-transparent w-fit flex flex-wrap flex-col">
-        <button class='btn btn-outline btn-primary'>{{articleItem.user.alias}}</button>
+        <button class='badge badge-neutral font-bold text-sm'>{{articleItem.user.alias}}</button>
         <p>{{articleItem.content}}</p>
       </div>
     </div>

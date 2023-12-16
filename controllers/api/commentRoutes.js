@@ -2,25 +2,28 @@ const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { QueryTypes } = require('sequelize');
 const { User, Article, Comment, ArticleKeyword, Keyword } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { withAuth, isNumeric } = require('../../utils/auth');
 //const withBoard = require('../../utils/withboard');
 
 /**
- * @name GET /api/comments/&order=ASC?attr=modified_at
- * @description Get all comments, including their keywords and users
+ * @name GET /api/comments/&order=ASC?attr=modified_at?articleid=<articleid>?userid=<userid>
+ * @description Get comments from an article and/or userid
  * @param {STRING} ?attr = 'modified_at|created_at' --- select the column to sort by. Default: 'created_at'
  * @param {STRING} ?order = 'ASC'|'DESC' --- based on order of the string. Default: 'DESC'
- * @returns {ARRAY} Array of all comments in JSON format | JSON error message if failed
-  */
+ * @param {INTEGER} ?articleid = The article id that the comments belong to. 0 means all articles.
+ * @param {INTEGER} ?userid = The user id that the comments belong to. 0 means all users.
+ * @returns {ARRAY} Array of all of the article's comments in JSON format | JSON error message if failed
+ */
 router.get('/', async (req, res) => {
-  // console.log('===== LIST ALL COMMENTS ====='); // debug logs
+  console.log('===== LIST ALL COMMENTS ====='); // debug logs
 
   // validate GET query parameter for ordering
+  // console.log(req.params.query); // debug logs
   let order = 'DESC'; // default
   if (req.query.hasOwnProperty('order')) {
-    if (req.params.query.toUpperCase() === 'ASC') {
+    if (req.query.order.toUpperCase() === 'ASC') {
       order = 'ASC';
-    } else if (req.params.query.toUpperCase() === 'DESC') {
+    } else if (req.query.order.toUpperCase() === 'DESC') {
       order = 'DESC';
     };
   };
@@ -29,7 +32,7 @@ router.get('/', async (req, res) => {
   let attr = 'created_at';
   if (req.query.hasOwnProperty('attr')) {
     attr = Object.keys(Comment.getAttributes()).find((elem) => {
-      // check if the query property is one of the Article model attribute (column) names
+      // check if the query property is one of the Comment model attribute (column) names
       return (req.query.attr.toLowerCase() === elem.toLowerCase());
     });
     if (attr == null) {
@@ -37,114 +40,145 @@ router.get('/', async (req, res) => {
     };
   };
 
+  // Add article id and/or user id to find parameters if specified
+  let articleid;
+  let commentsToFind = {
+    order: [[attr, order]],
+    include: [{
+      model: Article,
+      attributes: ['id', 'title'],
+    }, {
+      model: User,
+      attributes: ['alias']
+    }]
+  };
+
+  if (req.query.hasOwnProperty('articleid') && isNumeric(req.query.articleid)) {
+    articleid = parseInt(req.query.articleid);
+    if (articleid > 0) {
+      // if specified, look for this specific article id
+      commentsToFind.where = { article_id: articleid };
+    };
+  };
+
+  if (req.query.hasOwnProperty('userid') && isNumeric(req.query.userid)) {
+    userid = parseInt(req.query.userid);
+    if (userid > 0) {
+      // if specified, look for this specific user id
+      if (commentsToFind.hasOwnProperty('where')) {
+        commentsToFind.where.user_id = userid;
+      } else {
+        commentsToFind.where = { user_id: userid };
+      };
+    };
+  };
+
   try {
-    const articleData = await Comment.findAll({
-      order: [[attr, order]],
-      include: [{
-        model: Keyword,
-        through: {
-          attributes: []
-        },
-        // required: true
-      },
-      {
-        model: User,
-        attributes: ['id', 'alias']
-      }]
-    });
+    const commentData = await Comment.findAll(commentsToFind);
 
     // convert data (serialize) from sequelize instance to plain javascript object
-    const articleDataFormatted = articleData.map((elem) => {
+    const commentDataFormatted = commentData.map((elem) => {
       let plainelem = elem.get();
-      plainelem.keywords = elem.keywords.map((keywordelem) => {
-        return keywordelem.get();
-      });
-      plainelem.user = elem.user.get();
+      // plainelem.keywords = elem.keywords.map((keywordelem) => {
+      //   return keywordelem.get();
+      // });
+      // plainelem.user = elem.user.get();
       return plainelem;
     });
 
-    // let articleDataFormatted = await articleData.get();
-    console.log(articleDataFormatted); // debug logs
+    // let commentDataFormatted = await commentData.get();
+    //console.log(commentDataFormatted); // debug logs
 
     res.setHeader('Content-Type', 'application/json');
-    res.status(200).end(JSON.stringify(articleDataFormatted, null, 2));
+    res.status(200).end(JSON.stringify(commentDataFormatted, null, 2));
 
-    //res.status(200).json(articleDataFormatted);
+    //res.status(200).json(commentDataFormatted);
 
   } catch (err) {
     res.status(500).json(err);
   }
 
 });
+
 
 /**
- * @name GET /api/comments/:id
- * @description Get an article based on its article id
- * @param {INTEGER} :id --- article id
- * @returns {JSON} Article in JSON format | JSON error message if failed
-  */
-router.get('/:id', async (req, res) => {
-  // console.log('===== FIND ONE ARTICLE BY ID ====='); // debug logs
+ * validateCommentInput(req) validates the HTTP POST body JSON content
+ * @param {OBJECT} req --- expresjs req (request) object containing the HTTP body in req.body
+ * @returns {ARRAY} [ success, status, message ] --- [ if validated, status value, error message ]
+ */
+async function validateCommentInput(req) {
+  // POST requires at least a non-null parent or existing article_id
+  if (!(req.body.hasOwnProperty('parent') && isNumeric(req.body.parent) && parseInt(req.body.parent) > 0)) {
+    if (!(req.body.hasOwnProperty('article_id') && isNumeric(req.body.article_id) && (parseInt(req.body.article_id) > 0))) {
+      console.log("You must have a valid article id to create a comment, or specify a parent comment id when replying");
+      return [false, 400, "You must have a valid article id to create a comment, or specify a parent comment id when replying"];
+      // res.status(400).json({ message: "You must have a valid article id to create a comment, or specify a parent comment id when replying" });
+    };
+  };
 
-  try {
-    const articleData = await Comment.findOne({
-      where: { id: req.params.id },
-      include: [{
-        model: Keyword,
-        through: {
-          attributes: []
-        },
-      },
-      {
-        model: User,
-        attributes: ['id', 'alias']
-      }]
-    });
+  if (req.body.hasOwnProperty('article_id') && isNumeric(req.body.article_id) && parseInt(req.body.article_id) > 0) {
+    const article = await Article.findOne({ where: { id: req.body.article_id } });
+    if (article === null) {
+      console.log('Article Not Found!'); // debug log
+      // res.status(404).json({ message: "Article id not found" });
+      return [false, 404, "No valid article id found"];;
+    } else {
+      console.log(`Found article ${article}`); // debug log
+    };
+  };
 
-    // console.log(articleData); debug logs
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).end(JSON.stringify(articleData, null, 2));
+  if (req.body.hasOwnProperty('parent') && isNumeric(req.body.parent) && parseInt(req.body.parent) > 0) {
+    const parent = await Comment.findOne({ where: { id: req.body.parent } });
+    if (parent === null) {
+      console.log('Parent comment not found!'); // debug log
+      // res.status(404).json({ message: "Parent comment id not found" });
+      return [false, { message: "Parent comment id not found" }];
+    } else {
+      console.log(`Found article ${parent}`); // debug log
+    };
+  };
 
-  } catch (err) {
-    res.status(500).json(err);
-  }
-
-});
+  return [true, 200, "validated"];
+};
 
 
 /**
  * @name POST /api/comments
- * @description Create a new article into the database by the user's id, including its associated Keywords. Depends on the Article model.
+ * @description Create a new comment into the database by article and if this is a reply (by parent comment id). Users must be logged in to post comments.
  * @param {JSON} req.body JSON object literals in the POST HTTP body containing the following key/value pairs:
- * @param {INTEGER} parent A parent referring to another article_id. Parents can be used to denote followups, newer versions, or updates to an article.
- * @param {FLOAT} version A version number to attach to the article
- * @param {STRING} title The title of the article
- * @param {STRING} content The content of the article
- * @param {STRING} status A string indicating the article's status
- * @param {ARRAY} keywords An array of INTEGER strings IDs. ie. "keywords": ['5g','tech']
- * @returns {{JSON,ARRAY}} JSON object returning the newly created article {{ "id": "<newid>", "product_name": <new category name>", ... }, ARRAY } and ARRAY JSON tag objects that was created | error in JSON indicating what went wrong from sequelize
+ * @param {INTEGER} parent A parent comment referring to another comment. Parent should override article_id
+ * @param {INTEGER} user_id The user id associated with this comment.
+ * @param {INTEGER} article_id The article the comment is attached to.
+ * @param {STRING} content The content of the comment
+ * @returns {JSON} JSON object returning the newly created comment { "id": "<newid>", "content": "<comment content>"", ... } | error in JSON indicating what went wrong from sequelize
  */
 router.post('/', withAuth, async (req, res) => {
   /* req.body should look like this...
     {
       parent: 1,
-      version: 1.1,
-      title: "A fleeting post",
+      user_id: 1,
+      article_id: 1,
       content: "Et aute culpa fugiat tempor duis eu ad pariatur magna sunt minim anim labore officia. Irure sit non non quis ea consectetur eiusmod ut laboris mollit cillum incididunt mollit.",
-      status: "active",
-      keywords: ['tech', 'iot', '5g']
     }
   */
-  console.log(req.session);
-  let article;
+  console.log("=== POST - CREATE COMMENT ===");
+
+  // console.log(req.session); // debug log
+
+  // validate req.body input
+  const [success, status, error] = await validateCommentInput(req);
+  if (!success) {
+    res.status(status).json({ message: error });
+    return;
+  };
+
+  let comment;
   try {
-    article = await Comment.create({
+    comment = await Comment.create({
       parent: req.body.parent,
-      version: req.body.version,
-      title: req.body.title,
+      user_id: req.session.user_id,
+      article_id: req.body.article_id,
       content: req.body.content,
-      status: req.body.status,
-      user_id: req.session.user_id
     });
   } catch (err) {
     console.log(err); // debug logs
@@ -152,81 +186,57 @@ router.post('/', withAuth, async (req, res) => {
     return false;
   };
 
-  // if there are any added keywords, we need to create pairings to bulk create in the Keywords model
-  let keywords = [];
-  // check if tagIds exist first to prevent a crash
-  if (req.body.hasOwnProperty('keywords') && req.body.keywords.length) {
-    for (let i = 0; i < req.body.keywords.length; i++) {
-      let e = req.body.keywords[i].toLowerCase();
-      let keyword, created;
-      try {
-        [keyword, created] = await Keyword.findOrCreate({
-          where: { keyword: e },
-          defaults: {
-            keyword: e
-          }
-        });
-      } catch (err) {
-        console.log(err);
-        res.status(404).json(err);
-      };
-      keywords.push(keyword.get());
-    };
-
-    // destroy article >-< keyword relationship
-    await ArticleKeyword.destroy({
-      where: {
-        article_id: article.id
-      }
-    });
-
-    // Associate keywords with article
-    await ArticleKeyword.bulkCreate(
-      keywords.map((elem) => {
-        return { article_id: article.id, keyword_id: elem.id };
-      })
-    );
-
-  };
-
-  // console.log("KEYWORDS:", keywords); // debug logs
-
-  res.status(200).json({ article, keywords });
+  res.status(200).json(comment);
 });
 
 
+
 /**
- * @name PUT /api/comments/:id
- * @description Modify an article by id.
- * @param {JSON} req.body JSON object literals in the POST HTTP body containing the following key/value pairs:
- * @param {INTEGER} parent A parent referring to another article_id. Parents can be used to denote followups, newer versions, or updates to an article.
- * @param {FLOAT} version A version number to attach to the article
- * @param {STRING} title The title of the article
- * @param {STRING} content The content of the article
- * @param {STRING} status A string indicating the article's status
- * @param {ARRAY} keywords An array of INTEGER strings IDs. ie. "keywords": ['5g','tech']
- * @returns {JSON} JSON message reporting the number of records updated | error in JSON indicating what went wrong from sequelize
- */
+  * @name PUT /api/comments/:id
+  * @description Modify a comment by id.
+  * @param {JSON} req.body JSON object literals in the POST HTTP body containing the following key/value pairs:
+  * @param {INTEGER} parent A parent comment referring to another comment. Parent should override article_id
+  * @param {INTEGER} user_id The user id associated with this comment.
+  * @param {INTEGER} article_id The article the comment is attached to.
+  * @param {STRING} content The content of the comment
+  * @returns {JSON} JSON message reporting the number of records updated | error in JSON indicating what went wrong from sequelize
+  */
 router.put('/:id', withAuth, async (req, res) => {
-  let articleId = req.params.id;
-  let updatedArticle = {
+  console.log("=== PUT - MODIFY COMMENT ===");
+
+  // validate req.body input
+  const [success, status, error] = await validateCommentInput(req);
+  if (!success) {
+    res.status(status).json({ message: error });
+    return;
+  };
+
+  // check if the comment if of the same user (Users should only be able to update their own comments)
+  const oldcomment = await Comment.findOne({ where: { id: req.params.id, user_id: req.session.user_id } });
+  if (oldcomment === null) {
+    console.log(`Cannot find comment ${req.params.id} with user ${req.session.user_id}!`); // debug log
+    res.status(404).json({ message: `Cannot find comment ${req.params.id} with user ${req.session.user_id}!` });
+    return;
+  } else {
+    // console.log(`Found comment ${req.params.id}`); // debug log
+  };
+
+  let updatedComment = {
     parent: req.body.parent,
-    version: req.body.version,
-    title: req.body.title,
+    user_id: req.session.user_id,
+    article_id: req.body.article_id,
     content: req.body.content
   };
-  let rowsUpdated, updatedArticleData;
+  let rowsUpdated, updatedCommentData;
   // console.log("PUT before: ", articleId, req.session.user_id, updatedArticle);
 
   try {
-
-    [updatedArticleData, rowsUpdated] = await sequelize.query(
-      'UPDATE article SET parent = ?, version = ?, title = ?, content = ? WHERE id=? AND user_id=?',
+    [updatedCommentData, rowsUpdated] = await sequelize.query(
+      'UPDATE comment SET parent = ?, article_id = ?, content = ? WHERE id = ? AND user_id = ?',
       {
         replacements: [
           updatedComment.parent,
-          updatedComment.version,
-          updatedComment.title,
+          updatedComment.article_id,
           updatedComment.content,
           req.params.id,
           req.session.user_id
@@ -237,8 +247,8 @@ router.put('/:id', withAuth, async (req, res) => {
     // console.log('\nUpdated article:', updatedArticleData); // debug log
 
     // // Somehow the following is unreliable and waits until after (sequelize problem with promises? bug?). Replacing with the above raw query.
-    // [updatedArticleData, rowsUpdated] = await Comment.update(
-    //   updatedArticle,
+    // [updatedCommentData, rowsUpdated] = await Comment.update(
+    //   updatedComment,
     //   {
     //     where: {
     //       id: articleId,
@@ -253,48 +263,11 @@ router.put('/:id', withAuth, async (req, res) => {
     res.status(500).json({ message: `${err}` });
   };
 
-  // if there are any added keywords, we need to create pairings to bulk create in the Keywords model
-  let keywords = [];
-  // check if tagIds exist first to prevent a crash
-  if (req.body.hasOwnProperty('keywords') && req.body.keywords.length) {
-    for (let i = 0; i < req.body.keywords.length; i++) {
-      let e = req.body.keywords[i].toLowerCase();
-      let keyword, created;
-      try {
-        [keyword, created] = await Keyword.findOrCreate({
-          where: { keyword: e },
-          defaults: {
-            keyword: e
-          }
-        });
-      } catch (err) {
-        console.log(err);
-        res.status(404).json(err);
-      };
-      keywords.push(keyword.get());
-    };
-
-    // destroy article >-< keyword relationship
-    await ArticleKeyword.destroy({
-      where: {
-        article_id: article.id
-      }
-    });
-
-    // Associate keywords with article
-    await ArticleKeyword.bulkCreate(
-      keywords.map((elem) => {
-        return { article_id: article.id, keyword_id: elem.id };
-      })
-    );
-
-  };
-
   if (rowsUpdated == 0) {
     console.log('Nothing updated')
     res.status(400).json({ message: 'Nothing updated' });
   } else {
-    res.status(200).json({ message: 'Article updated' });
+    res.status(200).json({ message: 'Comment updated' });
   };
 
 });
@@ -304,23 +277,23 @@ router.put('/:id', withAuth, async (req, res) => {
  * @name DELETE /api/comments/:id
  * @description Delete an article based on its article id
  * @param {INTEGER} :id --- article id
- * @returns {JSON} Article in JSON format | JSON error message if failed
+ * @returns {JSON} Message describing result of how many rows are deleted | JSON error message if failed
   */
 router.delete('/:id', withAuth, async (req, res) => {
   try {
-    const articleData = await Comment.destroy({
+    const commentData = await Comment.destroy({
       where: {
         id: req.params.id,
         user_id: req.session.user_id
       },
     });
 
-    if (!articleData) {
-      res.status(404).json({ message: 'No article found with this user and id!' });
+    if (!commentData) {
+      res.status(404).json({ message: 'No comment found with this user and id!' });
       return;
     }
 
-    res.status(200).json({ message: `Article ${req.params.id} deleted. Delete operations: ${articleData}` });
+    res.status(200).json({ message: `Comment ${req.params.id} deleted. Delete operations: ${commentData}` });
   } catch (err) {
     res.status(500).json(err);
   }

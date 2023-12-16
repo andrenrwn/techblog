@@ -48,4 +48,15 @@ Comment.belongsTo(User, {
   foreignKey: 'user_id',
 });
 
+// An article can have many comments
+Article.hasMany(Comment, {
+  foreignKey: 'article_id'
+});
+
+Comment.belongsTo(Article, {
+  foreignKey: 'article_id'
+});
+
+
+
 module.exports = { User, Article, Comment, Keyword, ArticleKeyword, RelatedArticle };

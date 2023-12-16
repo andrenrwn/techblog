@@ -2,7 +2,7 @@ const blogConfig = require('../config/config');
 const sequelize = require('../config/connection');
 const router = require('express').Router();
 const { User, Article, ArticleKeyword, Comment, Keyword, RelatedArticle } = require('../models');
-const withAuth = require('../utils/auth');
+const { withAuth } = require('../utils/auth');
 //const withBoard = require('../utils/withboard');
 
 // Main page: all articles are displayed
@@ -42,8 +42,8 @@ router.get('/', async (req, res) => {
     });
 
     // let articleDataFormatted = await articleData.get();
-    console.log(articleDataFormatted);
-    console.log(Object.keys(Article.getAttributes()));
+    // console.log(articleDataFormatted);  // debug logs
+    // console.log(Object.keys(Article.getAttributes())); // debug logs - get all keys
 
     res.render('homepage', {
       articleDataFormatted,

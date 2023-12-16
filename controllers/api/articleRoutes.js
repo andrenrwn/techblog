@@ -2,7 +2,7 @@ const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { QueryTypes } = require('sequelize');
 const { User, Article, Comment, ArticleKeyword, Keyword } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { withAuth } = require('../../utils/auth');
 //const withBoard = require('../../utils/withboard');
 
 /**
@@ -18,9 +18,9 @@ router.get('/', async (req, res) => {
   // validate GET query parameter for ordering
   let order = 'DESC'; // default
   if (req.query.hasOwnProperty('order')) {
-    if (req.params.query.toUpperCase() === 'ASC') {
+    if (req.query.toUpperCase() === 'ASC') {
       order = 'ASC';
-    } else if (req.params.query.toUpperCase() === 'DESC') {
+    } else if (req.query.toUpperCase() === 'DESC') {
       order = 'DESC';
     };
   };
@@ -114,7 +114,7 @@ router.get('/:id', async (req, res) => {
 
 /**
  * @name POST /api/articles
- * @description Create a new article into the database by the user's id, including its associated Keywords. Depends on the Article model.
+ * @description Create a new article into the database by the user's id, including its associated Keywords. Users must be logged in to post articles.
  * @param {JSON} req.body JSON object literals in the POST HTTP body containing the following key/value pairs:
  * @param {INTEGER} parent A parent referring to another article_id. Parents can be used to denote followups, newer versions, or updates to an article.
  * @param {FLOAT} version A version number to attach to the article
@@ -122,7 +122,7 @@ router.get('/:id', async (req, res) => {
  * @param {STRING} content The content of the article
  * @param {STRING} status A string indicating the article's status
  * @param {ARRAY} keywords An array of INTEGER strings IDs. ie. "keywords": ['5g','tech']
- * @returns {{JSON,ARRAY}} JSON object returning the newly created article {{ "id": "<newid>", "product_name": <new category name>", ... }, ARRAY } and ARRAY JSON tag objects that was created | error in JSON indicating what went wrong from sequelize
+ * @returns {{JSON,ARRAY}} JSON object returning the newly created article {{ "id": "<newid>", "title": <new title>", ... }, ARRAY } and ARRAY JSON keywords that was assigned or created | error in JSON indicating what went wrong from sequelize
  */
 router.post('/', withAuth, async (req, res) => {
   /* req.body should look like this...

@@ -7,152 +7,108 @@
   <title>The Tech Blog</title>
   <!--<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">-->
   <link href='/css/daisyui.full.min.css' rel='stylesheet' type='text/css' />
-  <link rel='stylesheet' href='/css/jass.css' />
+  {{!--
+  <link rel='stylesheet' href='/css/jass.css' /> --}}
   <link rel='stylesheet' href='/css/style.css' />
 </head>
 
 <body>
 
-    <!-- Title Header -->
-    <header>
-      <!-- daisyui drawer -->
-      <div class="drawer" style="z-index: 100;">
-        <input id="my-drawer" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content">
-          <!-- Page content here -->
-
-          <!-- daisyui navbar as a drawer -->
-          <div class="flex-none absolute top-0 left-0 m-2">
-            <label for="my-drawer" class="btn btn-square btn-ghost drawer-button">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                class="inline-block w-5 h-5 stroke-current">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z">
-                </path>
-              </svg>
-            </label>
-          </div>
-
-          <!-- /Drawer page content end-->
+  <!-- Title Header -->
+  <header>
+    <!-- hidden modal dialog to display information about the background -->
+    <dialog id="background_modal" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg" id="backgroundheading"></h3>
+        <span class="py-4" id="backgroundinfo"></span>
+        <div class="modal-action">
+          <form method="dialog">
+            <!-- if there is a button in form, it will close the modal -->
+            <button class="btn">Ok</button>
+          </form>
         </div>
-        <div class="drawer-side">
-          <label for="my-drawer" class="drawer-overlay"></label>
+      </div>
+    </dialog>
 
-          <!-- hidden modal dialog to display information about the background -->
-          <dialog id="background_modal" class="modal">
-            <div class="modal-box">
-              <h3 class="font-bold text-lg" id="backgroundheading"></h3>
-              <span class="py-4" id="backgroundinfo"></span>
-              <div class="modal-action">
-                <form method="dialog">
-                  <!-- if there is a button in form, it will close the modal -->
-                  <button class="btn">Ok</button>
-                </form>
-              </div>
-            </div>
-          </dialog>
-
-          <!-- Drawer menu content here -->
-          <div class="navbar bg-gradient-to-b from-white to-transparent w-[100%-5px]">
-            <div class="navbar-start">
-              <div class="dropdown">
-                <label tabindex="0" class="btn btn-ghost lg:hidden">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-                  </svg>
-                </label>
-                <div class="flex-1">
-                  <a class="btn btn-ghost normal-case text-xl sm:max-lg:hidden">the tech blog</a>
-                </div>
-                <ul tabindex="0"
-                  class="menu menu-sm dropdown-content mt-3 z-[-10] p-2 shadow bg-base-100 rounded-box w-52">
-                  <li><a><button onclick="background_modal.showModal()">Background</button></a></li>
-                  <li>
-                    <div class="unitselector"><a>Units</a></div>
-                    <ul class="p-2 menuselection-units">
-                      <li><a data-units="metric">Metric (°C)</a></li>
-                      <li><a data-units="imperial">Imperial (°F)</a></li>
-                      <li><a data-units="standard">Standard (°K)</a></li>
-                    </ul>
-                  </li>
-                  <li><a id="clearhistory">Clear History</a></li>
-                </ul>
-              </div>
-            </div>
-            <div class="navbar-start hidden lg:flex">
-              <ul class="menu menu-horizontal px-1 items-center">
-                <li><a><button onclick="background_modal.showModal()">Background</button></a>
-                <li tabindex="0">
-                  <details class="unitselector">
-                    <summary>Units</summary>
-                    <ul class="p-2 menuselection-units">
-                      <li><a data-units="metric">Metric (°C)</a></li>
-                      <li><a data-units="imperial">Imperial (°F)</a></li>
-                      <li><a data-units="standard">Standard (°K)</a></li>
-                    </ul>
-                  </details>
-                </li>
-                <li><a id="clearhistory2">Clear History</a></li>
-                <!-- future option to use local timezone to render city time (TBD)
-                <li>
-                  <div class="form-control">
-                    <label class="label cursor-pointer">
-                      <span class="label-text">City TZ&nbsp;</span>
-                      <input id="useremotetimezone" type="checkbox" class="toggle" checked />
-                    </label>
-                  </div>
-                </li>
-                -->
+    <!-- Navbar menu content here -->
+    <nav class="navbar w-[100%-5px]">
+      <div class="navbar-start">
+        <div class="dropdown">
+          <label tabindex="0" class="btn btn-ghost lg:hidden">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+            </svg>
+          </label>
+          <h1 class="btn btn-info flex-1 text-xl sm:max-lg:hidden">
+            <span role='img' aria-label='tech blog'></span>
+            <a href='/'>the tech blog 💡</a>
+          </h1>
+          {{!-- <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[-10] p-2 shadow bg-base-200 rounded-box w-52"> --}}
+          <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-52">
+            <!-- Conditionally render login or logout links -->
+            {{#if logged_in}}
+            <li><a href='/profile'>Profile</a></li>
+            <li><a href='/logout' id='logout'>Logout</a></li>
+            {{else}}
+            <li><a href='/login'>Login</a></li>
+            {{/if}}
+            <li><a><button onclick="background_modal.showModal()">Background</button></a></li>
+            <li>
+              <div class="unitselector"><a>Units</a></div>
+              <ul class="p-2 menuselection-units">
+                <li><a data-units="metric">Metric (°C)</a></li>
+                <li><a data-units="imperial">Imperial (°F)</a></li>
+                <li><a data-units="standard">Standard (°K)</a></li>
               </ul>
-            </div>
-            <div class="navbar-end">
-              <label for="my-drawer" class="btn btn-circle btn-outline drawer-button">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </label>
-            </div>
-          </div>
-          <!-- /Drawer content end -->
+            </li>
+            <li><a id="clearhistory">Clear History</a></li>
           </ul>
         </div>
       </div>
-    </header>
+      <div class="navbar-start hidden lg:flex">
+        <ul class="menu menu-horizontal px-1 items-center">
+          <li><a><button onclick="background_modal.showModal()">Background</button></a>
+          <li tabindex="0">
+            <details class="unitselector">
+              <summary>Units</summary>
+              <ul class="p-2 menuselection-units">
+                <li><a data-units="metric">Metric (°C)</a></li>
+                <li><a data-units="imperial">Imperial (°F)</a></li>
+                <li><a data-units="standard">Standard (°K)</a></li>
+              </ul>
+            </details>
+          </li>
+          <li><a id="clearhistory2">Clear History</a></li>
+          <!-- Conditionally render login or logout links -->
+          {{#if logged_in}}
+          <li><a href='/profile'>Profile</a></li>
+          <li><a href='/logout' id='logout'>Logout</a></li>
+          {{else}}
+          <li><a href='/login'>Login</a></li>
+          {{/if}}
 
+          <!-- DaisyUI Theme Selector -->
+          <label class='flex cursor-pointer gap-2'>
+            <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'
+              stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+              <circle cx='12' cy='12' r='5' />
+              <path
+                d='M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4' />
+            </svg>
+            <input type='checkbox' value='synthwave' class='toggle theme-controller' />
+            <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'
+              stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
+              <path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'></path>
+            </svg>
+          </label>
+        </ul>
+      </div>
+    </nav>
+  </header>
 
   <div class='flex-column justify-space-around'>
-    <header class='display-flex justify-space-between align-center p-2'>
-      <h1 class="text-2xl btn btn-info">
-        <span role='img' aria-label='travel'></span>
-        <a href='/'>the tech blog 💡</a>
-      </h1>
-      <nav>
-        <label class='flex cursor-pointer gap-2'>
-          <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'
-            stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
-            <circle cx='12' cy='12' r='5' />
-            <path
-              d='M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4' />
-          </svg>
-          <input type='checkbox' value='synthwave' class='toggle theme-controller' />
-          <svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'
-            stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>
-            <path d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'></path>
-          </svg>
-        </label>
-        <!-- Conditionally render login or logout links -->
-        {{#if logged_in}}
-        <a href='/profile'>profile</a>
-        |
-        <button class='no-button' id='logout'>logout</button>
-        {{else}}
-        <a href='/login'>login</a>
-        {{/if}}
-      </nav>
-    </header>
-    <main class='container container-fluid mt-5'>
+    <main class='mt-5 px-5'>
       <!-- Render the sub layout -->
       {{{body}}}
     </main>
