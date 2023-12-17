@@ -1,41 +1,39 @@
-{{> loginpartial}}
-
-<div class="row gap-2">
-  <div class="col-md-5 border bg-gray-100 border-base-300 rounded-3xl p-0 w-full lg:w-1/2 lg:mr-2">
+<div class="row gap-2 flex flex-wrap">
+  <div class="border bg-gray-100 border-base-300 rounded-3xl p-0 w-[100%] lg:w-[calc(50%-1rem)] lg:mr-2">
     <h2 class="m-0 p-2 w-full bg-gray-300 rounded-t-2xl">Login</h2>
 
-    <form class="px-3 form login-form border-base-300">
+    <form class="px-3 form login-form w-[100%] border-base-300 gap-2">
       <div class="form-group">
         <label for="email-login">email:</label>
-        <input class="form-input" type="text" id="email-login" />
+        <input class="form-input block w-[100%]" type="text" id="email-login" />
       </div>
       <div class="form-group">
         <label for="password-login">password:</label>
-        <input class="form-input" type="password" id="password-login" />
+        <input class="form-input block w-[100%]" type="password" id="password-login" />
       </div>
-      <div class="form-group">
-        <button class="btn btn-primary" type="submit">login</button>
+      <div class="form-group flex justify-end">
+        <button class="btn btn-primary bg-black text-neutral-content" type="submit">login</button>
       </div>
     </form>
   </div>
-  <div class="col-md-6 border bg-gray-100 border-base-300 rounded-2xl p-0 w-full lg:w-1/2 lg:mr-2">
+  <div class="col-md-6 border bg-gray-100 border-base-300 rounded-2xl p-0 w-[100%] lg:w-[calc(50%-1rem)] lg:mr-2">
     <h2 class="m-0 p-2 w-full bg-gray-300 rounded-t-2xl">Signup</h2>
 
-    <form class="px-3 form signup-form border-base-300">
+    <form class="px-3 form signup-form w-[100%] border-base-300 gap-2">
       <div class="form-group">
         <label for="name-signup">name:</label>
-        <input class="form-input" type="text" id="name-signup" />
+        <input class="form-input block w-[100%]" type="text" id="name-signup" />
       </div>
       <div class="form-group">
         <label for="email-signup">email:</label>
-        <input class="form-input" type="text" id="email-signup" />
+        <input class="form-input block w-[100%]" type="text" id="email-signup" />
       </div>
       <div class="form-group">
         <label for="password-signup">password:</label>
-        <input class="form-input" type="password" id="password-signup" />
+        <input class="form-input block w-[100%]" type="password" id="password-signup" />
       </div>
-      <div class="form-group">
-        <button class="btn btn-primary" type="submit">signup</button>
+      <div class="form-group flex justify-end">
+        <button class="btn btn-primary bg-black text-neutral-content" type="submit">signup</button>
       </div>
     </form>
   </div>

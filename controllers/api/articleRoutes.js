@@ -136,14 +136,23 @@ router.post('/', withAuth, async (req, res) => {
     }
   */
   console.log(req.session);
+  console.log("POST REQ", req.body);
+  console.log({
+    parent: req.body.parent ? req.body.parent : null,
+    version: req.body.version ? req.body.version : null,
+    title: req.body.title ? req.body.title : null,
+    content: req.body.content ? req.body.content : null,
+    status: req.body.status ? req.body.status : null,
+    user_id: req.session.user_id
+  });
   let article;
   try {
     article = await Article.create({
-      parent: req.body.parent,
-      version: req.body.version,
-      title: req.body.title,
-      content: req.body.content,
-      status: req.body.status,
+      parent: req.body.parent ? req.body.parent : null,
+      version: req.body.version ? req.body.version : null,
+      title: req.body.title ? req.body.title : null,
+      content: req.body.content ? req.body.content : null,
+      status: req.body.status ? req.body.status : null,
       user_id: req.session.user_id
     });
   } catch (err) {

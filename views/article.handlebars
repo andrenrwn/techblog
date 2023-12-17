@@ -1,0 +1,67 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="dist/pell.css">
+</head>
+
+<body>
+  <div class="flex flex-wrap gap-2 max-lg:gap-0 justify-between">
+
+    <!-- Left pane -->
+    <div class="max-lg:min-w-[100%] w-[calc(70%-1rem)] gap-2">
+
+      <!-- Container for Pell editor -->
+      <div class="border text-base-content bg-base-200">
+        <h1 class="bg-neutral text-neutral-content font-bold text-lg p-2">Create A Blog Post</h1>
+        <div id="editor" class="pell"></div>
+
+        <details class="mt-2">
+          <summary class="">Text Preview</summary>
+          <pre id="text-output" class="whitespace-pre-wrap bg-base-200 text-base-content"></pre>
+        </details>
+
+        <details class="mt-2">
+          <summary>HTML output</summary>
+          <pre id="html-output" class="whitespace-pre-wrap"></pre>
+        </details>
+
+      </div>
+
+      <form class="px-2 form w-[100%] gap-2 bg-content-neutral">
+        <div class="">
+          <label for="title">Article Title:</label>
+          <input class="block w-[100%]" type="text" id="title" />
+        </div>
+        <div class="">
+          <label for="parent">parent article:</label>
+          <input class="block" type="text" id="parent" />
+        </div>
+        <div class="">
+          <label for="version">version:</label>
+          <input class="block" type="text" id="version" />
+        </div>
+        <div class="">
+          <label for="status">status:</label>
+          <input class="block" type="text" id="status" />
+        </div>
+      </form>
+
+
+      <!-- Menu options -->
+      <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2 font-bold text-lg">
+        <li><a>clear</a></li>
+        <li><a><button type="submit" id="save" onclick="article_save(event)">save</button></a></li>
+      </ul>
+    </div>
+
+    <!-- Right pane sidebar -->
+    <div class="max-lg:min-w-[100%] w-[calc(30%-1rem)]">
+      <ul class="menu p-4 min-h-full bg-base-200 text-base-content">
+        <!-- Sidebar content here -->
+        <li><a>Sidebar Item 1</a></li>
+        <li><a>Sidebar Item 2</a></li>
+      </ul>
+    </div>
+
+  </div>
+
+  <script src="dist/pell.js"></script>
+  <script src="js/create_article.js"></script>
