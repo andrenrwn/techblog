@@ -15,7 +15,7 @@ router.use(function (req, res, next) {
 
 // router.use('/', boardRoutes);
 router.use('/', homeRoutes);
-router.use('/article', articleRoutes);
+router.use('/articles', articleRoutes);
 router.use('/api', apiRoutes);
 
 module.exports = router;

@@ -13,13 +13,16 @@
 <!-- Loop over all user locations -->
 <div class="gap-2 flex flex-wrap">
   {{#each articleDataFormatted as |articleItem|}}
-  <a href="/article/{{articleItem.id}}" class="card min-w-[49%] max-w-[49%] h-fit max-h-[25%] border-none bg-grey-800 shadow-2xl">
+  <a href="/articles/{{articleItem.id}}"
+    class="card min-w-[49%] max-w-[49%] h-fit max-h-[38%] border-none bg-grey-800 shadow-2xl overflow-hidden">
     <h1 class="card-title bg-gray-200 px-8 pt-3 pb-3 rounded-t-2xl">{{articleItem.title}}</h1>
     {{!-- <h1 class="bg-current card-title mx-8 mt-8 mb-0 p-0">{{articleItem.title}}</h1> --}}
     <div class="card-body pt-3">
       <div class="gap-2 rounded-2xl text-black bg-transparent w-fit flex flex-wrap flex-col">
         <button class='badge badge-neutral font-bold text-sm'>{{articleItem.user.alias}}</button>
-        <p>{{articleItem.content}}</p>
+        <div class="overflow-hidden max-h-64">
+          {{{articleItem.content}}}
+        </div>
       </div>
     </div>
   </a>

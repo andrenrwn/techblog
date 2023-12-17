@@ -46,6 +46,7 @@ router.get('/', async (req, res) => {
     // console.log(Object.keys(Article.getAttributes())); // debug logs - get all keys
 
     res.render('homepage', {
+      user_id: req.session.user_id,
       articleDataFormatted,
       logged_in: req.session.logged_in,
     });
@@ -106,6 +107,7 @@ router.get('/profile', withAuth, async (req, res) => {
 
     res.render('profile', {
       ...user,
+      user_id: req.session.user_id,
       logged_in: req.session.logged_in,
     });
   } catch (err) {

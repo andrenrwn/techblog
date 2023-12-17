@@ -1,0 +1,8 @@
+{{#each articleDataFormatted as |articleItem|}}
+<li class='w-full'>
+    <a class='selectboard justify-between' data-id='{{articleItem.id}}'
+        href='/articles/{{articleItem.id}}'>{{articleItem.title}}
+        {{!-- <button class='btn btn-sm' data-id='{{board.board_id}}'>DELETE</button> --}}
+    </a>
+</li>
+{{/each}}

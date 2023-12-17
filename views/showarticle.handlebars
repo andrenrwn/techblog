@@ -1,0 +1,139 @@
+<head>
+  <link rel="stylesheet" type="text/css" href="/dist/pell.css" />
+</head>
+
+<body>
+  <div class="flex flex-wrap gap-2 max-lg:gap-0 justify-between">
+
+    <!-- Left pane ---------------------------------------------------------------------------------------------- -->
+    <div class="max-lg:min-w-[100%] w-[calc(70%-1rem)] gap-2">
+
+      <div class="hero bg-base-200">
+        <div class="hero-content flex-col lg:flex-row">
+          <div>
+            <h1 class="text-5xl font-bold mb-5">{{mainArticle.title}}</h1>
+            <div id="articlecontent" class="mt-5">
+              {{{mainArticle.content}}}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu options to manage article -->
+      <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
+        <li><a><button type="submit" id="articleeditbtn" onclick="toggle_editor(event,'articleeditorcontainer')">Edit <span
+                class="aeupdown">▽</span></button></a></li>
+        <li><a>Delete</a></li>
+        <li><a><button type="submit" id="update" onclick="article_update(event)">Update</button></a></li>
+      </ul>
+
+      <!-- Container for Pell editor -->
+      <div id="articleeditorcontainer" class="border text-base-content bg-base-200 hidden mt-2">
+
+        <!-- Input for article title -->
+        <label class="form-control w-full px-2 mb-2 bg-content-neutral">
+          <div class="label">
+            <span class="label-text">Title of Article</span>
+            <span class="label-text-alt">(required)</span>
+          </div>
+          <input id="articletitle" type="text" placeholder="Article Title" class="input input-bordered w-full"
+            value="{{mainArticle.title}}" />
+        </label>
+
+        <!-- Pell article editor -->
+        <h1 class="text-neutral-content p-2 text-sm">Update Article</h1>
+        <div id="articleeditor" class="pell"></div>
+
+        <details class="mt-2">
+          <summary class="">Text Preview</summary>
+          <pre id="text-output" class="whitespace-pre-wrap bg-base-200 text-base-content"></pre>
+        </details>
+
+        <details class="mt-2">
+          <summary>HTML output</summary>
+          <pre id="html-output" class="whitespace-pre-wrap"></pre>
+        </details>
+
+        <form class="form pt-2 px-2 w-[100%] gap-2 bg-content-neutral flex flex-row flex-wrap max-h-48">
+          <label class="form-control px-2 mb-2 bg-content-neutral">
+            <div class="label">
+              <span class="label-text">Article ID</span>
+            </div>
+            <kbd id="articleid" class="kbd input input-xs input-bordered max-w-xs">{{mainArticle.id}}</kbd>
+          </label>
+          <label class="form-control px-2 mb-2 bg-content-neutral">
+            <div class="label">
+              <span class="label-text">Parent Article</span>
+            </div>
+            <input id="articleparent" type="text" placeholder="Parent Article ID"
+              class="input input-xs input-bordered max-w-xs" value="{{mainArticle.parent}}" />
+          </label>
+          <label class="form-control px-2 mb-2 bg-content-neutral">
+            <div class="label">
+              <span class="label-text">Version</span>
+            </div>
+            <input id="articleversion" type="number" placeholder="Version Number"
+              class="input input-xs input-bordered max-w-xs" value="{{mainArticle.version}}" />
+          </label>
+          <label class="form-control px-2 mb-2 bg-content-neutral">
+            <div class="label">
+              <span class="label-text">Status</span>
+            </div>
+            <input id="articlestatus" type="text" placeholder="Article Status"
+              class="input input-xs input-bordered w-full max-w-xs" value="{{mainArticle.status}}" />
+          </label>
+        </form>
+      </div>
+
+      <!-- Comments ---------------------------------------------------------------------------------------------- -->
+      <div class="mt-5">
+        <h1 class="bg-neutral text-neutral-content p-2 text-sm">Comments</h1>
+
+        <!-- Menu options to manage comments -->
+        <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
+          <li><a><button type="submit" id="commenteditbtn" onclick="toggle_editor(event, 'commenteditorcontainer')">Add Comment <span
+                  class="aeupdown">▽</span></button></a></li>
+          <li><a><button type="submit" id="commentcreate" onclick="comment_create(event)">Update</button></a></li>
+        </ul>
+
+        <div id="commenteditorcontainer" class="border text-base-content bg-base-200 hidden mt-2">
+          <!-- Pell comment editor -->
+          <div id="commenteditor" class="pell"></div>
+        </div>
+
+        {{#each commentDataFormatted as |commentItem|}}
+        <div class="chat {{#if article_author}}chat-start{{else}}chat-end{{/if}}">
+          <div class="chat-image avatar">
+            <div class="w-10 rounded-full">
+              <img alt="chat bubble" src="/images/{{#if article_author}}user_kmg.png{{else}}user_becris.png{{/if}}" />
+            </div>
+          </div>
+          <div class="chat-header">
+            {{commentItem.user_id}}
+            <time class="text-xs opacity-50">{{commentItem.createdAt}}</time>
+          </div>
+          <div class="chat-bubble">{{commentItem.content}}</div>
+          <div class="chat-footer opacity-50">
+            {{commentItem.id}}, {{commentItem.parent}}
+          </div>
+        </div>
+        {{/each}}
+
+      </div>
+
+    </div>
+    <!-- /Left pane -->
+
+    <!-- Right pane sidebar -->
+    <div class="max-lg:min-w-[100%] w-[calc(30%-1rem)]">
+      <ul class="menu p-4 min-h-full bg-base-200 text-base-content">
+        <h1 class="bg-gray-300 p-3">Recent articles</h1>
+        <!-- Sidebar content here -->
+        {{>articlelistpartial}}
+      </ul>
+    </div>
+
+  </div>
+
+  <script src="/dist/pell.js"></script>
+  <script src="/js/show_article.js"></script>

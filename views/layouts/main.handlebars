@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang='en'>
 
 <head>
@@ -58,53 +59,33 @@
               <li><a href='/login'>Login</a></li>
               {{/if}}
               <li><a><button onclick="background_modal.showModal()">Credits</button></a></li>
-              <li><a href='/article'>Create Article</a></li>
-              {{!-- <li>
-                <div class="unitselector"><a>Units</a></div>
-                <ul class="p-2 menuselection-units">
-                  <li><a data-units="metric">Metric (°C)</a></li>
-                  <li><a data-units="imperial">Imperial (°F)</a></li>
-                  <li><a data-units="standard">Standard (°K)</a></li>
-                </ul>
-              </li> --}}
+              <li><a href='/articles'>Create Article</a></li>
             </ul>
         </div>
       </div>
       <div class="navbar-start hidden justify-end lg:flex">
         <ul class="menu menu-horizontal px-1 items-center">
           <li><a><button onclick="background_modal.showModal()">Credits</button></a>
-          <li><a href='/article'>Create Article</a></li>
-          {{!-- <li tabindex="0">
-            <details class="unitselector">
-              <summary>Units</summary>
-              <ul class="p-2 menuselection-units">
-                <li><a data-units="metric">Metric (°C)</a></li>
-                <li><a data-units="imperial">Imperial (°F)</a></li>
-                <li><a data-units="standard">Standard (°K)</a></li>
-              </ul>
-            </details>
-          </li>
-          <li><a id="clearhistory2">Clear History</a></li> --}}
+          <li><a href='/articles'>Create Article</a></li>
 
           <div class="dropdown dropdown-end">
-            <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+            <div id="user_id" tabindex="0" role="button" class="btn btn-ghost btn-circle avatar mr-2"
+              data-user_id="{{user_id}}">
               <div class="w-10 rounded-full">
-                <img alt="Tailwind CSS Navbar component" src="/images/user_becris.png" />
+                {{#if logged_in}}
+                <img alt="User" src="/images/user_kmg.png" />
+                {{else}}
+                <a href="/login"><img src="/images/user_becris.png" alt="Login" title='Login' /></a>
+                {{/if}}
               </div>
             </div>
+            <!-- Conditionally render login or logout links -->
+            {{#if logged_in}}
             <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-              <!-- Conditionally render login or logout links -->
-              {{#if logged_in}}
               <li><a href='/profile'>Profile</a></li>
               <li><a href='/api/users/logout' class='logout'>Logout</a></li>
-              {{else}}
-              <li><a href='/login' class="justify-between">
-                  Login
-                  <span class="badge">o</span>
-                </a>
-              </li>
-              {{/if}}
             </ul>
+            {{/if}}
           </div>
 
           <!-- DaisyUI Theme Selector -->
