@@ -48,7 +48,9 @@
     <!-- Navbar menu content here -->
     <nav class="navbar justify-between w-[100%-5px]">
       <div class="navbar-start">
-        <div class="dropdown" title="Homepage">
+
+        <!-- Web page logo and home page button -->
+        <div class="dropdown pl-3" title="Homepage">
           <label tabindex="0" class="btn lg:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -62,25 +64,35 @@
             class="menu menu-sm dropdown-content mt-3 z-[-10] p-2 shadow bg-base-200 rounded-box w-52"> --}}
             <ul tabindex="0" class="menu menu-sm dropdown-content z-[10] mt-3 p-2 shadow bg-base-200 rounded-box w-52">
               <!-- Conditionally render login or logout links -->
+              <li><a href='/' title='Home Page'>Home</a></li>
               {{#if logged_in}}
+              <li><a href='/articles/create' title="Create New Article">Create Article</a></li>
               <li><a href='/profile'>Profile</a></li>
               <li><a href='/api/users/logout' class='logout'>Logout</a></li>
               {{else}}
               <li><a href='/login'>Login</a></li>
               {{/if}}
+              <li><a href='/articles' title="Read Articles">Dashboard</a></li>
               <li><a><button onclick="background_modal.showModal()">Credits</button></a></li>
-              <li><a href='/articles' title="Create Article">Dashboard</a></li>
             </ul>
         </div>
       </div>
+
+      <!-- Horizontal Main Menu Options -->
       <div class="navbar-start hidden justify-end lg:flex">
         <ul class="menu menu-horizontal px-1 items-center">
+          {{#if logged_in}}
+          <li><a href='/articles/create' title='Create Article'>Create Article</a></li>
+          {{/if}}
+          <li><a href='/' title='Home Page'>Home</a></li>
+          <li><a href='/articles' title="Read Articles">Dashboard</a></li>
           <li><a><button onclick="background_modal.showModal()">About</button></a></li>
           {{#if logged_in}}
-          <li><a href='/articles' title='Create Article'>Dashboard</a></li>
           <li><a href='/api/users/logout' class='logout'>Logout</a></li>
+          {{else}}
+          <li><a href='/login' title="Login">Login</a></li>
           {{/if}}
-
+          <!-- User Avatar Icon Menu -->
           <div class="dropdown dropdown-end">
             <div id="user_id" tabindex="0" role="button" class="btn btn-ghost btn-circle avatar mr-2"
               data-user_id="{{user_id}}">

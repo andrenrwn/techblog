@@ -64,7 +64,7 @@ router.get('/', async (req, res) => {
     });
 
     // let articleDataFormatted = await articleData.get();
-    console.log(articleDataFormatted); // debug logs
+    //console.log(articleDataFormatted); // debug logs
 
     res.setHeader('Content-Type', 'application/json');
     res.status(200).end(JSON.stringify(articleDataFormatted, null, 2));

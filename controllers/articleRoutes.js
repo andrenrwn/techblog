@@ -7,7 +7,7 @@ const { withAuth } = require('../utils/auth');
 
 // Create an article
 // -----------------
-router.get('/', withAuth, async (req, res) => {
+router.get('/create', withAuth, async (req, res) => {
   try {
 
     const userData = await User.findByPk(req.session.user_id, {
@@ -18,7 +18,7 @@ router.get('/', withAuth, async (req, res) => {
     console.log(user);
 
     const articleData = await Article.findAll({
-      order: [['created_at', 'DESC']],
+      order: [['updated_at', 'DESC']],
       include: [{
         model: Keyword,
         through: {
@@ -58,24 +58,22 @@ router.get('/', withAuth, async (req, res) => {
     });
 
   } catch (err) {
-    res.status(500).json({message: `error on GET / : ${err}`});
+    res.status(500).json({ message: `error on GET /create : ${err}` });
   }
 });
 
-// Display one article and its comments
-// ------------------------------------
-router.get('/:id', async (req, res) => {
-  console.log("=== DISPLAY ARTICLE ===", req.params.id);
-  try {
 
+let displayArticles = async function (req, res) {
+  console.log("=== DISPLAY ARTICLE ==="); // debug log
+
+  try {
     const articleData = await Article.findAll({
-      order: [['created_at', 'DESC']],
+      order: [['updated_at', 'DESC']],
       include: [{
         model: Keyword,
         through: {
           attributes: []
         },
-        // required: true
       },
       {
         model: User,
@@ -87,40 +85,39 @@ router.get('/:id', async (req, res) => {
     const articleDataFormatted = articleData.map((elem) => {
       let plainelem = elem.get();
       plainelem.keywords = elem.keywords.map((keywordelem) => {
-        console.log(keywordelem.get());
+        // console.log(keywordelem.get()); // debug logs
         return (keywordelem.get());
       });
       plainelem.user = elem.user.get();
-      // console.log("===============PLAINELEM===============", plainelem);
-      //console.log(elem.get());
-      //console.log(JSON.stringify(elem, null, 4), "------\n");
+      // console.log("===============PLAINELEM===============", plainelem); // debug logs [TBD: keywords]
       return plainelem;
     });
 
-    let mainArticle = articleDataFormatted.find((elem) => {
-      return (elem.id == req.params.id);
-    });
+    let mainArticle;
+    if (req.params.hasOwnProperty('id') && req.params.id > 0) {
+      mainArticle = articleDataFormatted.find((elem) => {
+        return (elem.id == req.params.id);
+      });
+    } else if (articleDataFormatted.length > 0) {
+      mainArticle = articleDataFormatted[0];
+    };
 
     let commentData = await Comment.findAll({
-      order: [['created_at', 'DESC']],
-      where: { article_id: req.params.id },
+      order: [['updated_at', 'DESC']],
+      where: { article_id: mainArticle.id },
       include: [{
         model: User,
         attributes: { exclude: ['password'] }
       }]
     });
 
-    console.log("===========COMMENTS===========");
-    console.log(commentData);
+    console.log("===========COMMENTS===========", commentData.length);
+    // console.log(commentData);
 
     let commentDataFormatted = commentData.map((elem) => {
       return elem.get({ plain: true });
     });
 
-    //console.log(JSON.stringify(commentData.user, null, 4));
-    console.log("===========FORMATTED COMMENTS===========");
-    console.log(articleDataFormatted);
-    console.log("/===========FORMATTED COMMENTS===========");
     // console.log(JSON.stringify(articleDataFormatted, null, 4));
     // Example:
     // [
@@ -148,7 +145,14 @@ router.get('/:id', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: `error on GET /:id : ${err}` });
   };
-});
+}
+
+// Display the latest article and its comments
+router.get('/', displayArticles);
+
+// Display one article and its comments
+// ------------------------------------
+router.get('/:id', displayArticles);
 
 
 module.exports = router;

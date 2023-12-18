@@ -208,7 +208,7 @@ router.post('/', async (req, res) => {
       }
     );
 
-    console.log("ROWSUPDATED:", rowsUpdated, updatedKeywordData);
+    //console.log("ROWSUPDATED:", rowsUpdated, updatedKeywordData); //debug logs
     if (rowsUpdated === 0) {
       res.status(200).json({ message: `Keyword ${req.params.oldkeyword.toLowerCase()} not updated` });
     } else {
