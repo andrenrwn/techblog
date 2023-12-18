@@ -23,7 +23,7 @@
 
       <!-- Menu options to manage article -->
       {{#if logged_in}}
-      {{#if (eq ../user_id mainArticle.user_id)}}
+      {{#if (eq user_id mainArticle.user_id)}}
       <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
         <li class="border rounded-xl"><a><button type="submit" id="articleeditbtn"
               onclick="toggle_editor(event,'articleeditorcontainer')" title="Toggle article editor">Edit
@@ -37,7 +37,7 @@
       {{/if}}
 
       <!-- Container for Pell editor -->
-      <div id="articleeditorcontainer" class="border text-base-content bg-base-200 hidden mt-2">
+      <div id="articleeditorcontainer" class="border rounded-b-2xl text-base-content bg-base-200 hidden mt-2">
 
         <!-- Input for article title -->
         <label class="form-control w-full px-2 mb-2 bg-content-neutral">
@@ -63,7 +63,7 @@
           <pre id="html-output" class="whitespace-pre-wrap"></pre>
         </details>
 
-        <form class="form pt-2 px-2 w-[100%] gap-2 bg-content-neutral flex flex-row flex-wrap max-h-48">
+        <form class="form pt-2 px-2 w-[100%] gap-2 rounded-b-2xl pb-3 bg-neutral-content flex flex-row flex-wrap max-h-48">
           <label class="form-control px-2 mb-2 bg-content-neutral">
             <div class="label">
               <span class="label-text">Article ID</span>
@@ -102,14 +102,16 @@
 
       <!-- Comments ---------------------------------------------------------------------------------------------- -->
       <div class="mt-5">
-        <h1 class="bg-neutral text-neutral-content p-2 text-sm">Comments</h1>
+        <h1 class="bg-neutral rounded-t-2xl font-bold text-neutral-content p-2 text-sm">Comments</h1>
 
         <!-- Menu options to manage comments -->
         {{#if logged_in}}
         <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
-          <li class="border rounded-xl"><a><button type="submit" id="commenteditbtn" onclick="toggle_editor(event, 'commenteditorcontainer')">Add
+          <li class="border rounded-xl"><a><button type="submit" id="commenteditbtn"
+                onclick="toggle_editor(event, 'commenteditorcontainer')">Add
                 Comment <span class="aeupdown">▽</span></button></a></li>
-          <li class="border rounded-xl"><a><button type="submit" id="commentcreate" onclick="comment_create(event)">Save Comment</button></a></li>
+          <li class="border rounded-xl"><a><button type="submit" id="commentcreate" onclick="comment_create(event)">Save
+                Comment</button></a></li>
         </ul>
         {{/if}}
 

@@ -1,4 +1,4 @@
-# Article Table API
+## Members
 
 <dl>
 <dt><a href="#GET /api/articles/&order=ASC?attr=modified_at">GET /api/articles/&order=ASC?attr=modified_at</a> ⇒ <code>ARRAY</code></dt>
@@ -15,6 +15,57 @@
 </dd>
 <dt><a href="#DELETE /api/articles/_id">DELETE /api/articles/:id</a> ⇒ <code>JSON</code></dt>
 <dd><p>Delete an article based on its article id</p>
+</dd>
+<dt><a href="#GET /api/comments/&order=ASC?attr=modified_at?articleid=<articleid>?userid=<userid>">GET /api/comments/&order=ASC?attr=modified_at?articleid=<articleid>?userid=<userid></a> ⇒ <code>ARRAY</code></dt>
+<dd><p>Get comments from an article and/or userid</p>
+</dd>
+<dt><a href="#POST /api/comments">POST /api/comments</a> ⇒ <code>JSON</code></dt>
+<dd><p>Create a new comment into the database by article and if this is a reply (by parent comment id). Users must be logged in to post comments.</p>
+</dd>
+<dt><a href="#PUT /api/comments/_id">PUT /api/comments/:id</a> ⇒ <code>JSON</code></dt>
+<dd><p>Modify a comment by id.</p>
+</dd>
+<dt><a href="#DELETE /api/comments/_id">DELETE /api/comments/:id</a> ⇒ <code>JSON</code></dt>
+<dd><p>Delete an article based on its article id</p>
+</dd>
+<dt><a href="#GET /api/keywords/&order=ASC">GET /api/keywords/&order=ASC</a> ⇒ <code>ARRAY</code></dt>
+<dd><p>Get all keywords and its associated articles</p>
+</dd>
+<dt><a href="#GET /api/keywords/_id">GET /api/keywords/:id</a> ⇒ <code>JSON</code></dt>
+<dd><p>Get a keyword by id and list its associated articles</p>
+</dd>
+<dt><a href="#POST /api/keywords">POST /api/keywords</a> ⇒ <code>JSON</code></dt>
+<dd><p>Find or create a new keyword</p>
+</dd>
+<dt><a href="#PUT /api/keywords/_oldkeyword">PUT /api/keywords/:oldkeyword</a> ⇒ <code>JSON</code></dt>
+<dd><p>Change the :oldkeyword to a new keyword that&#39;s defined in the POST body</p>
+</dd>
+<dt><a href="#DELETE /api/keywords/_oldkeyword">DELETE /api/keywords/:oldkeyword</a> ⇒ <code>JSON</code></dt>
+<dd><p>Delete :oldkeyword from the database [TBD: Should only be available to the admin user]</p>
+</dd>
+<dt><a href="#POST /api/users/">POST /api/users/</a> ⇒ <code>JSON</code></dt>
+<dd><p>Creates a new user from the sign-up form</p>
+</dd>
+<dt><a href="#PUT /api/users/">PUT /api/users/</a> ⇒ <code>JSON</code></dt>
+<dd><p>Modifies user information. Logged in users can only modify their own data.</p>
+</dd>
+<dt><a href="#POST /api/users/login">POST /api/users/login</a> ⇒ <code>JSON</code></dt>
+<dd><p>Logs in a user using their email and passwords. Successful login populates the expressjs session</p>
+</dd>
+<dt><a href="#POST /api/users/logout">POST /api/users/logout</a></dt>
+<dd><p>Logs out a currently logged in user session</p>
+</dd>
+<dt><a href="#GET /api/users/logout">GET /api/users/logout</a></dt>
+<dd><p>Logs out a currently logged in user session and redirects them to the home page.
+             Can be linked directly as an a href</p>
+</dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#validateCommentInput">validateCommentInput(req)</a> ⇒ <code>ARRAY</code></dt>
+<dd><p>validateCommentInput(req) validates the HTTP POST body JSON content</p>
 </dd>
 </dl>
 
@@ -91,26 +142,6 @@ Delete an article based on its article id
 | --- | --- | --- |
 | :id | <code>INTEGER</code> | -- article id |
 
-
-
-# Comments API
-
-<dl>
-<dt><a href="#GET /api/comments/&order=ASC?attr=modified_at?articleid=<articleid>?userid=<userid>">GET /api/comments/&order=ASC?attr=modified_at?articleid=<articleid>?userid=<userid></a> ⇒ <code>ARRAY</code></dt>
-<dd><p>Get comments from an article and/or userid</p>
-</dd>
-<dt><a href="#POST /api/comments">POST /api/comments</a> ⇒ <code>JSON</code></dt>
-<dd><p>Create a new comment into the database by article and if this is a reply (by parent comment id). Users must be logged in to post comments.</p>
-</dd>
-<dt><a href="#PUT /api/comments/_id">PUT /api/comments/:id</a> ⇒ <code>JSON</code></dt>
-<dd><p>Modify a comment by id.</p>
-</dd>
-<dt><a href="#DELETE /api/comments/_id">DELETE /api/comments/:id</a> ⇒ <code>JSON</code></dt>
-<dd><p>Delete an article based on its article id</p>
-</dd>
-</dl>
-
-
 <a name="GET /api/comments/&order=ASC?attr=modified_at?articleid=<articleid>?userid=<userid>"></a>
 
 ## GET /api/comments/&order=ASC?attr=modified\_at?articleid=<articleid>?userid=<userid> ⇒ <code>ARRAY</code>
@@ -170,28 +201,6 @@ Delete an article based on its article id
 | --- | --- | --- |
 | :id | <code>INTEGER</code> | -- article id |
 
-
-
-# Keyword Table API
-
-<dl>
-<dt><a href="#GET /api/keywords/&order=ASC">GET /api/keywords/&order=ASC</a> ⇒ <code>ARRAY</code></dt>
-<dd><p>Get all keywords and its associated articles</p>
-</dd>
-<dt><a href="#GET /api/keywords/_id">GET /api/keywords/:id</a> ⇒ <code>JSON</code></dt>
-<dd><p>Get a keyword by id and list its associated articles</p>
-</dd>
-<dt><a href="#POST /api/keywords">POST /api/keywords</a> ⇒ <code>JSON</code></dt>
-<dd><p>Find or create a new keyword</p>
-</dd>
-<dt><a href="#PUT /api/keywords/_oldkeyword">PUT /api/keywords/:oldkeyword</a> ⇒ <code>JSON</code></dt>
-<dd><p>Change the :oldkeyword to a new keyword that&#39;s defined in the POST body</p>
-</dd>
-<dt><a href="#DELETE /api/keywords/_oldkeyword">DELETE /api/keywords/:oldkeyword</a> ⇒ <code>JSON</code></dt>
-<dd><p>Delete :oldkeyword from the database [TBD: Should only be available to the admin user]</p>
-</dd>
-</dl>
-
 <a name="GET /api/keywords/&order=ASC"></a>
 
 ## GET /api/keywords/&order=ASC ⇒ <code>ARRAY</code>
@@ -248,28 +257,6 @@ Delete :oldkeyword from the database [TBD: Should only be available to the admin
 | Param | Type | Description |
 | --- | --- | --- |
 | :oldkeyword | <code>STRING</code> | -- an HTML URL encoded string |
-
-
-## User management API
-
-<dl>
-<dt><a href="#POST /api/users/">POST /api/users/</a> ⇒ <code>JSON</code></dt>
-<dd><p>Creates a new user from the sign-up form</p>
-</dd>
-<dt><a href="#PUT /api/users/">PUT /api/users/</a> ⇒ <code>JSON</code></dt>
-<dd><p>Modifies user information. Logged in users can only modify their own data.</p>
-</dd>
-<dt><a href="#POST /api/users/login">POST /api/users/login</a> ⇒ <code>JSON</code></dt>
-<dd><p>Logs in a user using their email and passwords. Successful login populates the expressjs session</p>
-</dd>
-<dt><a href="#POST /api/users/logout">POST /api/users/logout</a></dt>
-<dd><p>Logs out a currently logged in user session</p>
-</dd>
-<dt><a href="#GET /api/users/logout">GET /api/users/logout</a></dt>
-<dd><p>Logs out a currently logged in user session and redirects them to the home page.
-             Can be linked directly as an a href</p>
-</dd>
-</dl>
 
 <a name="POST /api/users/"></a>
 
@@ -330,3 +317,15 @@ Logs out a currently logged in user session and redirects them to the home page.
              Can be linked directly as an a href
 
 **Kind**: global variable  
+<a name="validateCommentInput"></a>
+
+## validateCommentInput(req) ⇒ <code>ARRAY</code>
+validateCommentInput(req) validates the HTTP POST body JSON content
+
+**Kind**: global function  
+**Returns**: <code>ARRAY</code> - [ success, status, message ] --- [ if validated, status value, error message ]  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| req | <code>OBJECT</code> | -- expresjs req (request) object containing the HTTP body in req.body |
+

@@ -20,7 +20,9 @@ const updateProfileFormHandler = async (event) => {
     } else {
       alert(response.statusText);
     }
-  }
+  } else {
+    alert("password and email required");
+  };
 };
 
 document.getElementById('updateprofile-form').addEventListener('submit', updateProfileFormHandler);
