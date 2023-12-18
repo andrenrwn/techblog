@@ -61,6 +61,7 @@ router.get('/', async (req, res) => {
 // User profile page
 // -----------------
 router.get('/profile', withAuth, async (req, res) => {
+  console.log("login: ", req.session.user_id, req.session.username, req.session.useralias)
   try {
     // Find the logged in user based on the session ID
     const userData = await User.findByPk(req.session.user_id, {

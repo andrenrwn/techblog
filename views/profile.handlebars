@@ -1,36 +1,40 @@
 <div class="col-md-6 border bg-gray-100 border-base-300 rounded-2xl p-0 w-[100%] lg:w-[calc(50%-1rem)] lg:mr-2">
   <h2 class="m-0 p-2 w-full bg-gray-300 rounded-t-2xl">User Profile</h2>
 
-  <form class="px-3 form signup-form w-full border-base-300 gap-2">
+  <form class="px-3 form w-full border-base-300 gap-2" id="updateprofile-form">
     <div class="form-group mt-2 p-2 border rounded">
       <label for="name-signup">user id:</label>
-      <span class="form-input block w-[100%]" type="text" id="id">{{user.id}}</span>
+      <span class="form-input block w-[100%]" type="text">{{user.id}}</span>
     </div>
     <div class="form-group p-2 border rounded">
       <label for="name-signup">created:</label>
-      <span class="form-input block w-[100%]" type="text" id="id">{{user.createdAt}}</span>
+      <span class="form-input block w-[100%]" type="text">{{user.createdAt}}</span>
     </div>
     <div class="form-group p-2 border rounded">
-      <label for="password-signup">alias:</label>
-      <input class="form-input block w-[100%]" type="text" id="alias" value="{{user.alias}}" />
+      <label for="name-signup">updated:</label>
+      <span class="form-input block w-[100%]" type="text">{{user.updatedAt}}</span>
     </div>
     <div class="form-group p-2 border rounded">
       <label for="name-signup">name:</label>
-      <input class="form-input block w-[100%]" type="text" id="name" value="{{user.name}}" />
+      <span class="form-input block w-[100%]" type="text">{{user.name}}</span>
+    </div>
+    <div class="form-group p-2 border rounded">
+      <label for="password-signup">alias:</label>
+      <input class="form-input block w-[100%]" type="text" id="alias-update" value="{{user.alias}}" />
     </div>
     <div class="form-group p-2 border rounded">
       <label for="email-signup">email:</label>
-      <input class="form-input block w-[100%]" type="text" id="email" value="{{user.email}}" />
+      <input class="form-input block w-[100%]" type="text" id="email-update" value="{{user.email}}" />
     </div>
     <div class="form-group mb-2 p-2 border rounded">
       <label for="password-signup">password:</label>
-      <input class="form-input block w-[100%]" type="password" id="password" />
+      <input class="form-input block w-[100%]" type="password" id="password-update" />
     </div>
     <div class="form-group flex justify-end mb-2">
-      <button class="btn btn-info text-lg my-2" type="submit">Update Your Info</button>
+      <button class="btn btn-info text-lg my-2" type="submit">Update and Log Out</button>
     </div>
   </form>
 </div>
 
 <script src='/js/cdn.tailwindcss.com_3.3.5.js'></script>
-{{!-- <script src='/js/profile.js'></script> --}}
+<script src='/js/profile.js'></script>
