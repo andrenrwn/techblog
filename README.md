@@ -59,7 +59,18 @@ This is a tech blog site demonstrating:
 - The user can change their alias, email, or password, once updated they will need to log in again.
 
 
+## Schema
+
+Examine the schema here:\
+[SCHEMA.md](SCHEMA.md)
+
+![Schema](/assets/img/dbdmodel_sm.png)
+
+
 ## API
+
+Access the API docs here:\
+[API.md](API.md)
 
 [![Click here for the full API Documentation](assets/img/api.png 'API Documentation')](API.md)
 
