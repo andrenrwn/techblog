@@ -65,14 +65,19 @@
         <!-- Menu options -->
         <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2 font-bold text-lg">
           {{!-- <li><a>clear</a></li> --}}
-          <li><a><button type="submit" id="save" onclick="article_save(event)">save</button></a></li>
+          <li class="border rounded-xl"><a><button type="submit" id="save" onclick="article_save(event)">save</button></a></li>
         </ul>
     </div>
 
     <!-- Right pane sidebar -->
-    <div class="max-lg:min-w-[100%] w-[calc(30%-1rem)]">
-      <ul class="menu p-4 min-h-full bg-base-200 text-base-content">
-        <h1 class="rounded bg-gray-300 p-3">Recent posts</h1>
+    <div class="max-lg:min-w-[100%] w-[calc(30%-1rem)] min-h-full">
+      <h1 class="bg-gray-300 p-3 text-xl font-bold">My articles</h1>
+      <ul class="menu p-4 bg-base-200 text-base-content">
+        <!-- Sidebar content here -->
+        {{>myarticlelistpartial}}
+      </ul>
+      <h1 class="bg-gray-300 p-3 text-xl font-bold">All articles</h1>
+      <ul class="menu p-4 bg-base-200 min-h-screen text-base-content">
         <!-- Sidebar content here -->
         {{>articlelistpartial}}
       </ul>

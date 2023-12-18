@@ -1,8 +1,10 @@
 {{#each articleDataFormatted as |articleItem|}}
+{{#if (eq ../user_id articleItem.user_id)}}
 <li class=''>
     <a class='w-full flex flex-wrap justify-between' data-id='{{articleItem.id}}' href='/articles/{{articleItem.id}}'>
         <div class='text-lg m-0 p-0'>{{articleItem.title}}</div>
         <div class="text-xs m-0 p-0">{{format_date articleItem.createdAt}}</div>
     </a>
 </li>
+{{/if}}
 {{/each}}

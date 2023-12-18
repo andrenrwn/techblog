@@ -17,14 +17,23 @@
 
   <!-- Title Header -->
   <header>
-    <!-- hidden modal dialog to display information about the background -->
+    <!-- hidden modal dialog to display information / credits per icon usage requirement -->
     <dialog id="background_modal" class="modal">
       <div class="modal-box">
-        <h3 class="font-bold text-lg" id="backgroundheading"></h3>
+        <h3 class="font-bold text-neutral-content bg-neutral text-lg" id="backgroundheading">the tech blog 💡</h3>
         <span class="py-4" id="backgroundinfo">
-          <a href="https://www.flaticon.com/free-icons/user" target="_blank" rel="noopener noreferrer"
-            title="user icons">User icons created by Becris, kmg design
-            - Flaticon</a>
+          <p class="text-xs">by andrenrwn</p>
+          <br>
+          <ol class="list">
+            <li>expressjs handlebars</li>
+            <li>sequelize</li>
+            <li>mysql2</li>
+            <li><a class="link" href="https://github.com/andrenrwn/techblog" target="_blank" rel="noopener noreferrer"
+                title="GitHub repository">Github Repository</a></li>
+            <li><a class="link" href="https://www.flaticon.com/free-icons/user" target="_blank"
+                rel="noopener noreferrer" title="user icons">User icons created by Becris, kmg design
+                - Flaticon</a></li>
+          </ol>
         </span>
         <div class="modal-action">
           <form method="dialog">
@@ -38,19 +47,19 @@
     <!-- Navbar menu content here -->
     <nav class="navbar justify-between w-[100%-5px]">
       <div class="navbar-start">
-        <div class="dropdown">
-          <label tabindex="0" class="btn btn-ghost lg:hidden">
+        <div class="dropdown" title="Homepage">
+          <label tabindex="0" class="btn lg:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
             </svg>
           </label>
-          <h1 class="btn btn-info flex-1 text-2xl rounded-2xl sm:max-lg:hidden">
-            <a href='/'>the tech blog 💡</a>
+          <h1 class="text-neutral-content bg-neutral flex-1 text-2xl rounded-2xl max-lg:hidden kbd hover:bg-gray-500">
+            <a href='/' class=''>the tech blog 💡</a>
           </h1>
           {{!-- <ul tabindex="0"
             class="menu menu-sm dropdown-content mt-3 z-[-10] p-2 shadow bg-base-200 rounded-box w-52"> --}}
-            <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 p-2 shadow bg-base-200 rounded-box w-52">
+            <ul tabindex="0" class="menu menu-sm dropdown-content z-[10] mt-3 p-2 shadow bg-base-200 rounded-box w-52">
               <!-- Conditionally render login or logout links -->
               {{#if logged_in}}
               <li><a href='/profile'>Profile</a></li>
@@ -59,15 +68,16 @@
               <li><a href='/login'>Login</a></li>
               {{/if}}
               <li><a><button onclick="background_modal.showModal()">Credits</button></a></li>
-              <li><a href='/articles'>Create Article</a></li>
+              <li><a href='/articles' title="Create Article">Dashboard</a></li>
             </ul>
         </div>
       </div>
       <div class="navbar-start hidden justify-end lg:flex">
         <ul class="menu menu-horizontal px-1 items-center">
-          <li><a><button onclick="background_modal.showModal()">Credits</button></a></li>
+          <li><a><button onclick="background_modal.showModal()">About</button></a></li>
           {{#if logged_in}}
-          <li><a href='/articles'>Create Article</a></li>
+          <li><a href='/articles' title='Create Article'>Dashboard</a></li>
+          <li><a href='/api/users/logout' class='logout'>Logout</a></li>
           {{/if}}
 
           <div class="dropdown dropdown-end">
@@ -75,7 +85,7 @@
               data-user_id="{{user_id}}">
               <div class="w-10 rounded-full">
                 {{#if logged_in}}
-                <img alt="User" src="/images/user_kmg.png" title="User {{user_id}} logged in" />
+                <img alt="User" src="/images/user_kmg.png" title="{{username}} ( {{useralias}} ) logged in" />
                 {{else}}
                 <a href="/login"><img src="/images/user_becris.png" alt="Login" title='Login' /></a>
                 {{/if}}
@@ -114,13 +124,13 @@
       <!-- Render the sub layout -->
       {{{body}}}
     </main>
-    <footer class="footer items-center p-1 bg-info text-neutral-content mt-5">
+    {{!-- <footer class="footer items-center p-1 bg-neutral-content text-neutral mt-5">
       <aside class="items-center grid-flow-col">
         <p>2023</p>
       </aside>
       <nav class="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
       </nav>
-    </footer>
+    </footer> --}}
   </div>
 
   <!-- Render script for logged in users only -->

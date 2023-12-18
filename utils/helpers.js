@@ -3,6 +3,9 @@ module.exports = {
     // Format date as MM/DD/YYYY
     return date.toLocaleDateString();
   },
+  format_date_time: (date) => {
+    return date.toLocaleString();
+  },
   format_amount: (amount) => {
     // format large numbers with commas
     return parseInt(amount).toLocaleString();

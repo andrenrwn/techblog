@@ -47,12 +47,14 @@ router.get('/', async (req, res) => {
 
     res.render('homepage', {
       user_id: req.session.user_id,
+      username: req.session.username,
+      useralias: req.session.useralias,
       articleDataFormatted,
       logged_in: req.session.logged_in,
     });
 
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({message: `error : ${err}`});
   }
 });
 
@@ -108,10 +110,12 @@ router.get('/profile', withAuth, async (req, res) => {
     res.render('profile', {
       user,
       user_id: req.session.user_id,
+      username: req.session.username,
+      useralias: req.session.useralias,
       logged_in: req.session.logged_in,
     });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({message: `error on /profile : ${err}`});
   }
 });
 

@@ -52,11 +52,13 @@ router.get('/', withAuth, async (req, res) => {
       user,
       articleDataFormatted,
       user_id: req.session.user_id,
+      username: req.session.username,
+      useralias: req.session.useralias,
       logged_in: req.session.logged_in,
     });
 
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({message: `error on GET / : ${err}`});
   }
 });
 
@@ -133,20 +135,19 @@ router.get('/:id', async (req, res) => {
     //   }
     // ]
 
-    const article_author = (req.session.user_id === mainArticle.user_id);
-
     res.render('showarticle', {
       mainArticle,
       articleDataFormatted,
       commentDataFormatted,
       logged_in: req.session.logged_in,
       user_id: req.session.user_id,
-      article_author
+      username: req.session.username,
+      useralias: req.session.useralias
     });
 
   } catch (err) {
-    res.status(500).json(err);
-  }
+    res.status(500).json({ message: `error on GET /:id : ${err}` });
+  };
 });
 
 

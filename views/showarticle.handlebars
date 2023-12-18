@@ -23,15 +23,17 @@
 
       <!-- Menu options to manage article -->
       {{#if logged_in}}
+      {{#if (eq ../user_id mainArticle.user_id)}}
       <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
-        <li><a><button type="submit" id="articleeditbtn" onclick="toggle_editor(event,'articleeditorcontainer')"
-              title="Toggle article editor">Edit
+        <li class="border rounded-xl"><a><button type="submit" id="articleeditbtn"
+              onclick="toggle_editor(event,'articleeditorcontainer')" title="Toggle article editor">Edit
               <span class="aeupdown">▽</span></button></a></li>
-        <li><a><button type="submit" id="articledelbtn" onclick="article_delete(event)"
+        <li class="border rounded-xl"><a><button type="submit" id="articledelbtn" onclick="article_delete(event)"
               title="Delete article">Delete</button></a></li>
-        <li><a><button type="submit" id="update" onclick="article_update(event)"
+        <li class="border rounded-xl"><a><button type="submit" id="update" onclick="article_update(event)"
               title="Update article">Update</button></a></li>
       </ul>
+      {{/if}}
       {{/if}}
 
       <!-- Container for Pell editor -->
@@ -105,9 +107,9 @@
         <!-- Menu options to manage comments -->
         {{#if logged_in}}
         <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
-          <li><a><button type="submit" id="commenteditbtn" onclick="toggle_editor(event, 'commenteditorcontainer')">Add
+          <li class="border rounded-xl"><a><button type="submit" id="commenteditbtn" onclick="toggle_editor(event, 'commenteditorcontainer')">Add
                 Comment <span class="aeupdown">▽</span></button></a></li>
-          <li><a><button type="submit" id="commentcreate" onclick="comment_create(event)">Save Comment</button></a></li>
+          <li class="border rounded-xl"><a><button type="submit" id="commentcreate" onclick="comment_create(event)">Save Comment</button></a></li>
         </ul>
         {{/if}}
 
@@ -121,7 +123,8 @@
         <div class="chat {{#if (eq ../user_id commentItem.user_id)}}chat-end{{else}}chat-start{{/if}}">
           <div class="dropdown dropdown-end chat-image avatar">
 
-            <div tabindex="0" {{#if (eq ../user_id commentItem.user_id)}}role="button"{{/if}} class="w-10 rounded-full m-1">
+            <div tabindex="0" {{#if (eq ../user_id commentItem.user_id)}}role="button" {{/if}}
+              class="w-10 rounded-full m-1">
               <img alt="chat bubble {{#if (eq ../user_id commentItem.user_id)}}hover:bg-gray-500{{/if}}"
                 src="/images/{{#if (eq ../user_id commentItem.user_id)}}user_kmg.png{{else}}user_becris.png{{/if}}" />
             </div>
@@ -151,9 +154,16 @@
     <!-- /Left pane -->
 
     <!-- Right pane sidebar -->
-    <div class="max-lg:min-w-[100%] w-[calc(30%-1rem)]">
-      <ul class="menu p-4 min-h-full bg-base-200 text-base-content">
-        <h1 class="bg-gray-300 p-3">Recent articles</h1>
+    <div class="max-lg:min-w-[100%] w-[calc(30%-1rem)] min-h-full">
+      {{#if logged_in}}
+      <h1 class="bg-gray-300 p-3 text-xl font-bold">My articles</h1>
+      <ul class="menu p-4 bg-base-200 text-base-content">
+        <!-- Sidebar content here -->
+        {{>myarticlelistpartial}}
+      </ul>
+      {{/if}}
+      <h1 class="bg-gray-300 p-3 text-lg font-bold">All Articles</h1>
+      <ul class="menu p-4 bg-base-200 text-base-content min-h-full">
         <!-- Sidebar content here -->
         {{>articlelistpartial}}
       </ul>
