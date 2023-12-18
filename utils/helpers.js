@@ -22,4 +22,7 @@ module.exports = {
   first_char: (name) => {
     return name[0];
   },
+  eq: function (a, b) {
+    return (a == b);
+  }
 };

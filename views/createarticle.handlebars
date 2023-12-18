@@ -11,6 +11,14 @@
       <!-- Container for Pell editor -->
       <div class="border text-base-content bg-base-200">
         <h1 class="bg-neutral text-neutral-content font-bold text-lg p-2">Create A Blog Post</h1>
+        <label class="form-control px-2 mb-2 bg-content-neutral">
+          <div class="label">
+            <span class="label-text">Article Title</span>
+          </div>
+          <input id="articletitle" type="text" placeholder="Article Title"
+            class="input input-lg text-lg input-bordered" />
+        </label>
+
         <div id="editor" class="pell"></div>
 
         <details class="mt-2">
@@ -22,34 +30,43 @@
           <summary>HTML output</summary>
           <pre id="html-output" class="whitespace-pre-wrap"></pre>
         </details>
-
       </div>
 
-      <form class="px-2 form w-[100%] gap-2 bg-content-neutral">
-        <div class="">
-          <label for="title">Article Title:</label>
-          <input class="block w-[100%]" type="text" id="title" />
-        </div>
-        <div class="">
-          <label for="parent">parent article:</label>
-          <input class="block" type="text" id="parent" />
-        </div>
-        <div class="">
-          <label for="version">version:</label>
-          <input class="block" type="text" id="version" />
-        </div>
-        <div class="">
-          <label for="status">status:</label>
-          <input class="block" type="text" id="status" />
-        </div>
-      </form>
+      <form class="form pt-2 px-2 w-[100%] gap-2 bg-content-neutral flex flex-row flex-wrap max-h-48">
+        <label class="form-control px-2 mb-2 bg-content-neutral">
+          <div class="label">
+            <span class="label-text">Article Author</span>
+          </div>
+          <kbd id="articleauthor" class="kbd input input-xs input-bordered max-w-xs">{{user.name}}
+            ({{user.alias}})</kbd>
+        </label>
+        <label class="form-control px-2 mb-2 bg-content-neutral">
+          <div class="label">
+            <span class="label-text">Parent Article</span>
+          </div>
+          <input id="articleparent" type="text" placeholder="Parent Article ID"
+            class="input input-xs input-bordered max-w-xs" />
+        </label>
+        <label class="form-control px-2 mb-2 bg-content-neutral">
+          <div class="label">
+            <span class="label-text">Version</span>
+          </div>
+          <input id="articleversion" type="number" placeholder="Version Number"
+            class="input input-xs input-bordered max-w-xs" />
+        </label>
+        <label class="form-control px-2 mb-2 bg-content-neutral">
+          <div class="label">
+            <span class="label-text">Status</span>
+          </div>
+          <input id="articlestatus" type="text" placeholder="Article Status"
+            class="input input-xs input-bordered w-full max-w-xs" />
+        </label>
 
-
-      <!-- Menu options -->
-      <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2 font-bold text-lg">
-        <li><a>clear</a></li>
-        <li><a><button type="submit" id="save" onclick="article_save(event)">save</button></a></li>
-      </ul>
+        <!-- Menu options -->
+        <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2 font-bold text-lg">
+          {{!-- <li><a>clear</a></li> --}}
+          <li><a><button type="submit" id="save" onclick="article_save(event)">save</button></a></li>
+        </ul>
     </div>
 
     <!-- Right pane sidebar -->

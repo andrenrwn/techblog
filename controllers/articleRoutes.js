@@ -9,6 +9,14 @@ const { withAuth } = require('../utils/auth');
 // -----------------
 router.get('/', withAuth, async (req, res) => {
   try {
+
+    const userData = await User.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+    });
+
+    const user = userData.get({ plain: true });
+    console.log(user);
+
     const articleData = await Article.findAll({
       order: [['created_at', 'DESC']],
       include: [{
@@ -41,6 +49,7 @@ router.get('/', withAuth, async (req, res) => {
     // console.log(Object.keys(Article.getAttributes())); // debug logs - get all keys
 
     res.render('createarticle', {
+      user,
       articleDataFormatted,
       user_id: req.session.user_id,
       logged_in: req.session.logged_in,
@@ -103,11 +112,14 @@ router.get('/:id', async (req, res) => {
     console.log(commentData);
 
     let commentDataFormatted = commentData.map((elem) => {
-      return elem.get();
+      return elem.get({ plain: true });
     });
 
     //console.log(JSON.stringify(commentData.user, null, 4));
-    //console.log(JSON.stringify(articleDataFormatted, null, 4));
+    console.log("===========FORMATTED COMMENTS===========");
+    console.log(articleDataFormatted);
+    console.log("/===========FORMATTED COMMENTS===========");
+    // console.log(JSON.stringify(articleDataFormatted, null, 4));
     // Example:
     // [
     //   {
@@ -121,13 +133,15 @@ router.get('/:id', async (req, res) => {
     //   }
     // ]
 
+    const article_author = (req.session.user_id === mainArticle.user_id);
+
     res.render('showarticle', {
       mainArticle,
       articleDataFormatted,
       commentDataFormatted,
       logged_in: req.session.logged_in,
       user_id: req.session.user_id,
-      article_author: (req.session.user_id === mainArticle.user_id),
+      article_author
     });
 
   } catch (err) {

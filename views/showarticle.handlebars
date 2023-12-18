@@ -12,6 +12,8 @@
         <div class="hero-content flex-col lg:flex-row">
           <div>
             <h1 class="text-5xl font-bold mb-5">{{mainArticle.title}}</h1>
+            <p class="text-sm">by <span class="kbd">{{mainArticle.user.alias}}</span></p>
+            <p class="text-xs opacity-50">posted {{mainArticle.createdAt}}<br>updated {{mainArticle.updatedAt}}</p>
             <div id="articlecontent" class="mt-5">
               {{{mainArticle.content}}}
             </div>
@@ -20,12 +22,17 @@
       </div>
 
       <!-- Menu options to manage article -->
+      {{#if logged_in}}
       <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
-        <li><a><button type="submit" id="articleeditbtn" onclick="toggle_editor(event,'articleeditorcontainer')">Edit <span
-                class="aeupdown">▽</span></button></a></li>
-        <li><a>Delete</a></li>
-        <li><a><button type="submit" id="update" onclick="article_update(event)">Update</button></a></li>
+        <li><a><button type="submit" id="articleeditbtn" onclick="toggle_editor(event,'articleeditorcontainer')"
+              title="Toggle article editor">Edit
+              <span class="aeupdown">▽</span></button></a></li>
+        <li><a><button type="submit" id="articledelbtn" onclick="article_delete(event)"
+              title="Delete article">Delete</button></a></li>
+        <li><a><button type="submit" id="update" onclick="article_update(event)"
+              title="Update article">Update</button></a></li>
       </ul>
+      {{/if}}
 
       <!-- Container for Pell editor -->
       <div id="articleeditorcontainer" class="border text-base-content bg-base-200 hidden mt-2">
@@ -63,6 +70,12 @@
           </label>
           <label class="form-control px-2 mb-2 bg-content-neutral">
             <div class="label">
+              <span class="label-text">Article Author</span>
+            </div>
+            <kbd id="articleid" class="kbd input input-xs input-bordered max-w-xs">{{mainArticle.user.alias}}</kbd>
+          </label>
+          <label class="form-control px-2 mb-2 bg-content-neutral">
+            <div class="label">
               <span class="label-text">Parent Article</span>
             </div>
             <input id="articleparent" type="text" placeholder="Parent Article ID"
@@ -90,31 +103,44 @@
         <h1 class="bg-neutral text-neutral-content p-2 text-sm">Comments</h1>
 
         <!-- Menu options to manage comments -->
+        {{#if logged_in}}
         <ul class="menu menu-horizontal bg-base-200 w-[100%] justify-end mt-2">
-          <li><a><button type="submit" id="commenteditbtn" onclick="toggle_editor(event, 'commenteditorcontainer')">Add Comment <span
-                  class="aeupdown">▽</span></button></a></li>
-          <li><a><button type="submit" id="commentcreate" onclick="comment_create(event)">Update</button></a></li>
+          <li><a><button type="submit" id="commenteditbtn" onclick="toggle_editor(event, 'commenteditorcontainer')">Add
+                Comment <span class="aeupdown">▽</span></button></a></li>
+          <li><a><button type="submit" id="commentcreate" onclick="comment_create(event)">Save Comment</button></a></li>
         </ul>
+        {{/if}}
 
         <div id="commenteditorcontainer" class="border text-base-content bg-base-200 hidden mt-2">
           <!-- Pell comment editor -->
           <div id="commenteditor" class="pell"></div>
         </div>
 
+        {{!-- render all comments for this article --}}
         {{#each commentDataFormatted as |commentItem|}}
-        <div class="chat {{#if article_author}}chat-start{{else}}chat-end{{/if}}">
-          <div class="chat-image avatar">
-            <div class="w-10 rounded-full">
-              <img alt="chat bubble" src="/images/{{#if article_author}}user_kmg.png{{else}}user_becris.png{{/if}}" />
+        <div class="chat {{#if (eq ../user_id commentItem.user_id)}}chat-end{{else}}chat-start{{/if}}">
+          <div class="dropdown dropdown-end chat-image avatar">
+
+            <div tabindex="0" {{#if (eq ../user_id commentItem.user_id)}}role="button"{{/if}} class="w-10 rounded-full m-1">
+              <img alt="chat bubble {{#if (eq ../user_id commentItem.user_id)}}hover:bg-gray-500{{/if}}"
+                src="/images/{{#if (eq ../user_id commentItem.user_id)}}user_kmg.png{{else}}user_becris.png{{/if}}" />
             </div>
+
+            {{!-- <div tabindex="0" role="button" class="btn m-1">Click</div> --}}
+            {{#if (eq ../user_id commentItem.user_id)}}
+            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-32 text-xs">
+              <li><button class="min-w-full" type="submit"
+                  onclick="comment_delete(event, {{commentItem.id}})">Delete</button></li>
+            </ul>
+            {{/if}}
           </div>
           <div class="chat-header">
-            {{commentItem.user_id}}
-            <time class="text-xs opacity-50">{{commentItem.createdAt}}</time>
+            <div class="badge badge-outline badge-neutral">{{commentItem.user.alias}}</div>
           </div>
-          <div class="chat-bubble">{{commentItem.content}}</div>
+          <div class="chat-bubble">{{{commentItem.content}}}</div>
           <div class="chat-footer opacity-50">
-            {{commentItem.id}}, {{commentItem.parent}}
+            <time class="text-xs opacity-50">{{commentItem.createdAt}}</time>
+            {{!-- {{commentItem.id}}{{#if commentItem.parent}}, {{commentItem.parent}}{{/if}} --}}
           </div>
         </div>
         {{/each}}
