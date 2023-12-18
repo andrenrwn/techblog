@@ -18,4 +18,9 @@ router.use('/', homeRoutes);
 router.use('/articles', articleRoutes);
 router.use('/api', apiRoutes);
 
+// Set express default route so it always goes to the homepage
+router.get('*', function(req, res) {
+  res.redirect('/');
+});
+
 module.exports = router;

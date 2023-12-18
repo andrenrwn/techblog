@@ -64,6 +64,17 @@ router.get('/create', withAuth, async (req, res) => {
 
 
 let displayArticles = async function (req, res) {
+
+  const blankArticle = {
+    title: "A Blank New Site",
+    content: "There are no articles on this website yet. Feel free to create one and share it with your friends!",
+    createdAt: "soon",
+    updatedAt: "soon",
+    user: {
+      alias: 'master control program'
+    }
+  };
+
   console.log("=== DISPLAY ARTICLE ==="); // debug log
 
   try {
@@ -94,29 +105,46 @@ let displayArticles = async function (req, res) {
     });
 
     let mainArticle;
-    if (req.params.hasOwnProperty('id') && req.params.id > 0) {
-      mainArticle = articleDataFormatted.find((elem) => {
-        return (elem.id == req.params.id);
+    let commentDataFormatted;
+
+    // If there are no articles in the database, just render an introduction message
+    if (articleData.length === 0) {
+      mainArticle = blankArticle;
+    } else {
+      // There's at least one article in the database
+      // Check if params.id is valid (this can be called via /articles or /articles/:id )
+      if (req.params.hasOwnProperty('id') && (req.params.id > 0)) {
+        // This is called via /articles/:id so let's find the article
+        mainArticle = articleDataFormatted.find((elem) => {
+          return (elem.id == req.params.id);
+        });
+        if (!mainArticle) {
+          // Article id not found, so just redirect user back to the article page.
+          console.log(`Error: Article id ${req.params.id} not found, redirecting to main dashboard`);
+          res.status(302).redirect('/articles');
+          return;
+        };
+      } else { // We are called via /articles so just pick the first available article to display
+        mainArticle = articleDataFormatted[0];
+      };
+
+      let commentData = await Comment.findAll({
+        order: [['updated_at', 'DESC']],
+        where: { article_id: mainArticle.id },
+        include: [{
+          model: User,
+          attributes: { exclude: ['password'] }
+        }]
       });
-    } else if (articleDataFormatted.length > 0) {
-      mainArticle = articleDataFormatted[0];
+
+      console.log("===========COMMENTS===========", commentData.length);
+      // console.log(commentData);
+
+      commentDataFormatted = commentData.map((elem) => {
+        return elem.get({ plain: true });
+      });
+
     };
-
-    let commentData = await Comment.findAll({
-      order: [['updated_at', 'DESC']],
-      where: { article_id: mainArticle.id },
-      include: [{
-        model: User,
-        attributes: { exclude: ['password'] }
-      }]
-    });
-
-    console.log("===========COMMENTS===========", commentData.length);
-    // console.log(commentData);
-
-    let commentDataFormatted = commentData.map((elem) => {
-      return elem.get({ plain: true });
-    });
 
     // console.log(JSON.stringify(articleDataFormatted, null, 4));
     // Example:
