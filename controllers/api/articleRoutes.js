@@ -18,9 +18,9 @@ router.get('/', async (req, res) => {
   // validate GET query parameter for ordering
   let order = 'DESC'; // default
   if (req.query.hasOwnProperty('order')) {
-    if (req.query.toUpperCase() === 'ASC') {
+    if (req.query.order.toUpperCase() === 'ASC') {
       order = 'ASC';
-    } else if (req.query.toUpperCase() === 'DESC') {
+    } else if (req.query.order.toUpperCase() === 'DESC') {
       order = 'DESC';
     };
   };
